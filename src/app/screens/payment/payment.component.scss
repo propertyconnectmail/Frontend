@@ -1,0 +1,285 @@
+.page-container {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;  
+    overflow-y: auto;
+
+    .all-professionals-header {
+        margin-bottom: 1.5rem;
+        opacity: 1;
+        transform: translateY(15px);
+        animation: fadeInUp 0.5s ease-out forwards;
+        animation-delay: 0.05s;
+      
+        h2 {
+          font-size: clamp(0.8rem, 2.5vw, 1.3rem);
+          font-weight: 700;
+          color: #0f172a;
+          margin: 0;
+        }
+      }
+      
+      .header-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        opacity: 0;
+        transform: translateY(15px);
+        animation: fadeInUp 0.5s ease-out forwards;
+        animation-delay: 0.1s;
+      
+        .search-container {
+          display: flex;
+          align-items: center;
+          position: relative;
+      
+          .search-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 1rem;
+            height: 1rem;
+            color: #94a3b8;
+            pointer-events: none;
+          }
+      
+          input {
+            padding: 0.65rem 0.75rem 0.65rem 2.25rem;
+            border-radius: 0.5rem;
+            border: 1px solid #cbd5e1;
+            font-size: 0.875rem;
+            min-width: 300px;
+            background-color: #fff;
+            color: #343a40;
+            transition: border-color 0.3s ease;
+      
+            &:focus {
+              border-color: #18A0FB;
+              outline: none;
+              transition: border-color 0.3s ease;
+            }
+          }
+        }
+      
+        .new-btn {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          background-color: #FFFFFF;
+          color: #18a0fb;
+          padding: 0.65rem 1.25rem;
+          border: 1px solid #18a0fb;
+          border-radius: 0.5rem;
+          font-size: 0.875rem;
+          font-weight: 500;
+          cursor: pointer;
+          transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+          box-shadow: 0 2px 8px rgba(24, 160, 251, 0.15);
+      
+          &:hover {
+            background-color: #18a0fb;
+            color: white;
+            transform: translateY(-1px);
+          }
+      
+          &:active {
+            transform: scale(0.97);
+          }
+      
+          .plus-icon {
+            width: 1rem;
+            height: 1rem;
+          }
+        }
+      }
+      
+      // Fade-in animation
+    @keyframes fadeInUp {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+    }
+      
+      
+  
+    .shimmer-wrapper {
+      display: block;
+      gap: 1rem;
+  
+      .shimmer-card {
+        height: 500px;
+        background: linear-gradient(90deg, #f8f8f8 25%, #e0e0e0 50%, #f8f8f8 75%);
+
+        background-size: 200% 100%;
+        animation: shimmer 1.5s infinite;
+        border-radius: 0.75rem;
+      }
+    }
+  
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+
+    .table-container {
+        background: #ffffff;
+        border-radius: 0.75rem; // 12px rounded corners
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        padding-top: 3rem;
+        padding-bottom: 2rem;
+        padding-right: 2rem;
+        padding-left: 2rem;
+        margin-bottom: 2rem;
+        width: 100%;
+        max-width: 100%;
+      }
+      
+  
+    .table-wrapper {
+        background: #ffffff;
+        border-radius: 0.5rem;
+        overflow-x: auto; // Ensures horizontal scrolling if needed
+        min-width: 100%;  // Prevents shrinking below container width
+      
+        table {
+          width: 100%;
+          border-collapse: collapse;
+          min-width: 900px;
+          table-layout: auto; // this lets the browser size columns based on content
+          transition: width 0.5s ease-in-out;
+      
+          th {
+            padding-left: 1rem;
+            padding-right: 1rem;
+            padding-top: 1.5rem;
+            padding-bottom: 1.5rem;
+            text-align: left;
+            border-right: 1px solid #e9ecef; // NEW: vertical column separator
+            border-bottom: 1px solid #e9ecef; // updated border color
+            color: #343a40; // row text color
+            white-space: nowrap;
+
+            &:last-child {
+                border-right: none; // Avoid double border on the rightmost cell
+            }
+          }
+
+          td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef; // updated border color
+            border-right: 1px solid #e9ecef; // NEW: vertical column separator
+            color: #343a40; // row text color
+            white-space: nowrap;
+            word-break: break-word;
+
+            &:last-child {
+                border-right: none; // Avoid double border on the rightmost cell
+            }
+          }
+      
+          thead {
+            background: #ffffff;
+      
+            th {
+              color: #6c757d;
+              font-weight: 600;
+              user-select: none;
+              cursor: grab;
+            }
+          }
+      
+          tbody {
+            tr {
+              &.even {
+                background-color: #F8F9FA;
+              }
+      
+              &:not(.even) {
+                background-color: #ffffff;
+              }
+            }
+          }
+      
+          .status {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+      
+            &.active { background: #22c55e; }
+            &.blocked { background: #6b7280; }
+          }
+      
+          .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+          
+            button {
+              all: unset; // fully reset default button styles
+              display: inline-flex;
+              align-items: center;
+              justify-content: center;
+              width: 32px;
+              height: 32px;
+              border: 1px solid #CED4DA;
+              border-radius: 6px;
+              cursor: pointer;
+              transition: all 0.2s ease;
+          
+              img {
+                width: 18px;
+                height: 18px;
+                transition: filter 0.2s ease;
+              }
+          
+              &:hover,
+              &:focus {
+                background-color: #18A0FB;
+                border-color: #18A0FB;
+          
+                img {
+                  filter: brightness(0) invert(1); // makes icon white
+                }
+              }
+          
+              &:active {
+                animation: bounce 0.3s ease;
+              }
+            }
+          }
+          
+        }
+      }
+      
+  
+    .table-footer {
+      margin-top: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+  
+      select {
+        padding: 0.4rem 0.8rem;
+        border-radius: 0.4rem;
+        border: 1px solid #d1d5db;
+        font-size: 0.85rem;
+      }
+    }
+  }
+  
+
+  // Optional: bounce animation
+@keyframes bounce {
+    0%   { transform: scale(1); }
+    30%  { transform: scale(0.95); }
+    60%  { transform: scale(1.05); }
+    100% { transform: scale(1); }
+  } 

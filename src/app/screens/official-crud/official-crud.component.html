@@ -1,0 +1,226 @@
+<div class="add-professional-wrapper fade-in" *ngIf="this.mode === 'add'">
+
+    <div class="all-professionals-header">
+        <h2>Add Official</h2>
+    </div>
+
+    <form [formGroup]="form" novalidate>
+      <div class="form-grid">
+        <div class="form-section">  
+          <div class="form-group" *ngFor="let field of formFields">
+            <label [for]="field.key">{{ field.label | titlecase }}<span> *</span></label>
+            <input [formControlName]="field.key" [id]="field.key" type="text" [placeholder]="field.placeholder" />
+            <small class="form-error" [class.visible]="form.get(field.key)?.invalid && form.get(field.key)?.touched">{{field.error}}</small>
+          </div>
+
+          <div class="form-group" style="margin-top: 1.2rem;">
+            <div class="dob-group">
+              <div class="dropdown-wrapper">
+                <label for="province">Province <span>*</span></label>
+                <select formControlName="province" class="dob-select">
+                  <option value="" disabled>Select Official Province</option>
+                  <option *ngFor="let province of provinces" [value]="province">{{ province }}</option>
+                </select>
+              </div>
+              <div class="dropdown-wrapper">
+                <label for="district">District <span>*</span></label>
+                <select formControlName="district" class="dob-select">
+                  <option value="" disabled>Select Official District</option>
+                  <option *ngFor="let district of districts" [value]="district">{{ district }}</option>
+                </select>
+              </div>
+              <div class="dropdown-wrapper">
+                <label for="type">Type <span>*</span></label>
+                <select formControlName="type" class="dob-select">
+                  <option value="" disabled>Select Official Type</option>
+                  <option *ngFor="let type of types" [value]="type">{{ capitalizeWords(type) }}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          
+          <div class="actions">
+            <button class="button create" (click)="create()">
+                <div class="btn-inner">
+                    <span *ngIf="!isSubmitting">Create</span>
+                    <span *ngIf="isSubmitting" class="spinner spinner-primary spinner-md"></span>
+                </div>
+            </button>
+            <button type="button" class="button cancel" (click)="discardChanges()">Reset Form</button>
+            <button type="button" class="button cancel" (click)="cancel()">Cancel</button>
+          </div>          
+        </div>
+      </div>
+    </form>
+  </div>
+  
+
+  <div class="add-professional-wrapper fade-in" *ngIf="this.mode === 'view'">
+
+    <div class="all-professionals-header">
+        <h2>View Official</h2>
+    </div>
+
+
+    <form [formGroup]="form" novalidate>
+      <div class="form-grid">
+        <div class="form-section">  
+            <div class="form-group" *ngFor="let field of formFields">
+                <label [for]="field.key">{{ field.label | titlecase }}<span> *</span></label>
+                <input [formControlName]="field.key" [id]="field.key" type="text" [placeholder]="field.placeholder" />
+                <small class="form-error" [class.visible]="form.get(field.key)?.invalid && form.get(field.key)?.touched">{{field.error}}</small>
+            </div>
+    
+            <div class="form-group" style="margin-top: 1.2rem;">
+                <div class="dob-group">
+                    <div class="dropdown-wrapper">
+                    <label for="province">Province <span>*</span></label>
+                    <select formControlName="province" class="dob-select">
+                        <option value="" disabled>Select Official Province</option>
+                        <option *ngFor="let province of provinces" [value]="province">{{ province }}</option>
+                    </select>
+                    </div>
+                    <div class="dropdown-wrapper">
+                    <label for="district">District <span>*</span></label>
+                    <select formControlName="district" class="dob-select">
+                        <option value="" disabled>Select Official District</option>
+                        <option *ngFor="let district of districts" [value]="district">{{ district }}</option>
+                    </select>
+                    </div>
+                    <div class="dropdown-wrapper">
+                    <label for="type">Type <span>*</span></label>
+                    <select formControlName="type" class="dob-select">
+                        <option value="" disabled>Select Official Type</option>
+                        <option *ngFor="let type of types" [value]="type">{{ capitalizeWords(type) }}</option>
+                    </select>
+                    </div>
+                </div>
+            </div>
+          
+          <div class="actions">
+            <button type="button" class="button create" (click)="cancel()">Go Back</button>
+          </div>
+        </div>   
+      </div>
+    </form>
+  </div>
+
+
+
+
+  <div class="add-professional-wrapper fade-in" *ngIf="this.mode === 'edit'">
+
+    <div class="all-professionals-header">
+        <h2>Update Official</h2>
+    </div>
+
+
+    <form [formGroup]="form" novalidate>
+      <div class="form-grid">
+        <div class="form-section">  
+            <div class="form-group" *ngFor="let field of formFields">
+                <label [for]="field.key">{{ field.label | titlecase }}<span> *</span></label>
+                <input [formControlName]="field.key" [id]="field.key" type="text" [placeholder]="field.placeholder" />
+                <small class="form-error" [class.visible]="form.get(field.key)?.invalid && form.get(field.key)?.touched">{{field.error}}</small>
+            </div>
+      
+            <div class="form-group" style="margin-top: 1.2rem;">
+                <div class="dob-group">
+                    <div class="dropdown-wrapper">
+                    <label for="province">Province <span>*</span></label>
+                    <select formControlName="province" class="dob-select">
+                        <option value="" disabled>Select Official Province</option>
+                        <option *ngFor="let province of provinces" [value]="province">{{ province }}</option>
+                    </select>
+                    </div>
+                    <div class="dropdown-wrapper">
+                    <label for="district">District <span>*</span></label>
+                    <select formControlName="district" class="dob-select">
+                        <option value="" disabled>Select Official District</option>
+                        <option *ngFor="let district of districts" [value]="district">{{ district }}</option>
+                    </select>
+                    </div>
+                    <div class="dropdown-wrapper">
+                    <label for="type">Type <span>*</span></label>
+                    <select formControlName="type" class="dob-select">
+                        <option value="" disabled>Select Official Type</option>
+                        <option *ngFor="let type of types" [value]="type">{{ capitalizeWords(type) }}</option>
+                    </select>
+                    </div>
+                </div>
+            </div>
+          
+          <div class="actions">
+            <button class="button create" (click)="update()">
+              <div class="btn-inner">
+                  <span *ngIf="!isSubmitting">Update</span>
+                  <span *ngIf="isSubmitting" class="spinner spinner-primary spinner-md"></span>
+              </div>
+          </button>
+          <button type="button" class="button cancel" (click)="cancel()">Cancel</button>
+          </div>
+        </div>   
+      </div>
+    </form>
+
+  </div>
+  
+
+
+  <div class="add-professional-wrapper fade-in" *ngIf="this.mode === 'delete'">
+
+    <div class="all-professionals-header">
+        <h2>Delete Official</h2>
+    </div>
+
+
+    <form [formGroup]="form" novalidate>
+      <div class="form-grid">
+        <div class="form-section">  
+            <div class="form-group" *ngFor="let field of formFields">
+                <label [for]="field.key">{{ field.label | titlecase }}<span> *</span></label>
+                <input [formControlName]="field.key" [id]="field.key" type="text" [placeholder]="field.placeholder" />
+                <small class="form-error" [class.visible]="form.get(field.key)?.invalid && form.get(field.key)?.touched">{{field.error}}</small>
+            </div>
+      
+            <div class="form-group" style="margin-top: 1.2rem;">
+                <div class="dob-group">
+                    <div class="dropdown-wrapper">
+                    <label for="province">Province <span>*</span></label>
+                    <select formControlName="province" class="dob-select">
+                        <option value="" disabled>Select Official Province</option>
+                        <option *ngFor="let province of provinces" [value]="province">{{ province }}</option>
+                    </select>
+                    </div>
+                    <div class="dropdown-wrapper">
+                    <label for="district">District <span>*</span></label>
+                    <select formControlName="district" class="dob-select">
+                        <option value="" disabled>Select Official District</option>
+                        <option *ngFor="let district of districts" [value]="district">{{ district }}</option>
+                    </select>
+                    </div>
+                    <div class="dropdown-wrapper">
+                    <label for="type">Type <span>*</span></label>
+                    <select formControlName="type" class="dob-select">
+                        <option value="" disabled>Select Official Type</option>
+                        <option *ngFor="let type of types" [value]="type">{{ capitalizeWords(type) }}</option>
+                    </select>
+                    </div>
+                </div>
+            </div>
+          
+          <div class="actions">
+            <button class="button cancel" (click)="delete()">
+              <div class="btn-inner">
+                  <span *ngIf="!isSubmitting">Delete</span>
+                  <span *ngIf="isSubmitting" class="spinner spinner-primary spinner-md"></span>
+              </div>
+          </button>
+          <button type="button" class="button cancel" (click)="cancel()">Cancel</button>
+          </div>
+        </div>   
+      </div>
+    </form>
+
+  </div>
+  

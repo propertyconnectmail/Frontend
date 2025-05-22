@@ -1,0 +1,150 @@
+<div class="page-container">
+
+    <div class="all-professionals-header">
+        <h2>All Professionals</h2>
+      </div>
+      
+      <div class="header-row">
+        <div class="search-container">
+          <svg viewBox="0 0 24 24" class="search-icon">
+            <path
+              d="M21 21l-4.35-4.35M10 18a8 8 0 100-16 8 8 0 000 16z"
+              stroke="currentColor"
+              stroke-width="2"
+              fill="none"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+          <input [formControl]="searchControl" placeholder="Search by name, email, phone, status or type" />
+        </div>
+      
+        <button (click)="add()" class="new-btn">
+          <svg
+            class="plus-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <line x1="12" y1="5" x2="12" y2="19" />
+            <line x1="5" y1="12" x2="19" y2="12" />
+          </svg>
+          New Professional
+        </button>
+      </div>
+      
+  
+    <div *ngIf="isLoading" class="shimmer-wrapper">
+      <div class="shimmer-card" *ngFor="let n of [].constructor(1)"></div>
+    </div>
+  
+    <div class="table-container" *ngIf="!isLoading" [@fadeInOut]>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr cdkDropList [cdkDropListData]="draggableColumns" (cdkDropListDropped)="drop($event)" cdkDropListOrientation="horizontal">
+                <th>#</th> <!-- Numeric index column -->
+                <th *ngFor="let col of draggableColumns" cdkDrag>{{ col.label }}</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let prof of paginatedData; let i = index" [class.even]="i % 2 === 0">
+                <td>{{ i + 1 }}</td> <!-- Numeric ID based on index -->
+                
+                <!-- Draggable columns -->
+                <td *ngFor="let col of draggableColumns">
+                  <ng-container [ngSwitch]="col.key">
+                    <ng-container *ngSwitchCase="'status'">
+                      <span class="status" [ngClass]="prof.status"></span> {{ prof.status | titlecase }}
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'phone'">
+                      {{ prof['phone'] }}
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'fullName'">
+                      {{ prof.fullName }}
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'type'">
+                      {{ prof.type | titlecase }}
+                    </ng-container>
+                    <ng-container *ngSwitchDefault>
+                      {{ prof[col.key] }}
+                    </ng-container>
+                  </ng-container>
+                </td>
+          
+                <td class="action-buttons">
+                  <button (click)="view(prof.email)" title="View"><img src="assets/icons/view.svg" alt="View" /></button>
+                  <button (click)="edit(prof.email)" title="Edit"><img src="assets/icons/edit.svg" alt="Edit" /></button>
+                  <button (click)="delete(prof.email)" title="Delete"><img src="assets/icons/delete.svg" alt="Delete" /></button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          
+          
+          
+        </div>  
+      <div class="table-footer" style="display: flex; justify-content: flex-end;">
+        <!-- Use your pagination code here -->
+        <!-- Pagination Controls -->
+        <div class="pagination-controls">
+          <button (click)="prevPage()" [disabled]="currentPage === 1" aria-label="Previous Page">
+            <svg viewBox="0 0 24 24" class="chevron chevron-left">
+              <path d="M15 6l-6 6 6 6" />
+            </svg>
+          </button>
+        
+          <!-- Show first page -->
+          <button
+            *ngIf="totalPages > 1"
+            [class.active]="currentPage === 1"
+            (click)="goToPage(1)"
+            [attr.aria-current]="currentPage === 1 ? 'page' : null"
+            aria-label="Go to page 1"
+          >
+            1
+          </button>
+        
+          <!-- Leading ellipsis -->
+          <span *ngIf="currentPage > 4">...</span>
+        
+          <!-- Visible page range -->
+          <button
+            *ngFor="let page of visiblePages"
+            [class.active]="currentPage === page"
+            (click)="goToPage(page)"
+            [attr.aria-current]="currentPage === page ? 'page' : null"
+            [attr.aria-label]="'Go to page ' + page"
+          >
+            {{ page }}
+          </button>
+        
+          <!-- Trailing ellipsis -->
+          <span *ngIf="currentPage < totalPages - 3">...</span>
+        
+          <!-- Show last page -->
+          <button
+            *ngIf="totalPages > 1"
+            [class.active]="currentPage === totalPages"
+            (click)="goToPage(totalPages)"
+            [attr.aria-current]="currentPage === totalPages ? 'page' : null"
+            [attr.aria-label]="'Go to page ' + totalPages"
+          >
+            {{ totalPages }}
+          </button>
+        
+          <button (click)="nextPage()" [disabled]="currentPage === totalPages" aria-label="Next Page">
+            <svg viewBox="0 0 24 24" class="chevron chevron-right">
+              <path d="M9 6l6 6-6 6" />
+            </svg>
+          </button>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+  

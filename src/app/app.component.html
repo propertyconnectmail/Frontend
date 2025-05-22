@@ -1,0 +1,27 @@
+<!-- Global Loader -->
+<div *ngIf="isLoading" class="global-loader">
+  <div class="spinner"></div>
+</div>
+
+<!-- Show login screen if user is not logged in -->
+<app-login *ngIf="!isLoggedIn"></app-login>
+
+<!-- Main layout if user is logged in -->
+<div *ngIf="isLoggedIn" class="app-layout">
+  <!-- Sidebar (always visible for logged-in users) -->
+  <app-sidebar></app-sidebar>
+
+  <!-- Main Content Area -->
+  <div class="app-main">
+    <!-- Topbar will be rendered inside individual pages -->
+     <app-topbar></app-topbar>
+    <router-outlet></router-outlet>
+
+    <!-- Footer (optional) -->
+    <footer class="app-footer">
+      <p>&copy; {{ currentYear }} Property Connect. All rights reserved.</p>
+    </footer>
+  </div>
+</div>
+
+<app-toast></app-toast>

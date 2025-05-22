@@ -1,0 +1,22 @@
+<nav class="sidebar" [@collapseToggle]="isCollapsed ? 'collapsed' : 'expanded'" [class.collapsed]="isCollapsed" [class.expanded]="!isCollapsed">
+  <div class="logo-container">
+    <img src="assets/Logo-Web.svg" alt="Logo" class="logo-icon" />
+    <span class="logo-text">
+      <strong>Property</strong><span class="highlight">Connect</span>
+    </span>
+  </div>
+
+  <div class="collapse-toggle" (click)="toggleSidebar()" [title]="isCollapsed ? 'Expand' : 'Collapse'">
+    <img src="assets/menu/menu.svg" alt="Toggle" />
+  </div>
+
+  <ul class="nav-list">
+    <li *ngFor="let item of navItems"
+        class="nav-item"
+        [routerLink]="item.route"
+        routerLinkActive="active">
+      <img [src]="item.icon" class="nav-icon" [alt]="item.label" />
+      <span class="nav-label">{{ item.label }}</span>
+    </li>
+  </ul>
+</nav>

@@ -1,0 +1,139 @@
+@use './styles/helpers.scss' as *;
+
+/* styles.scss */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: 'Manrope', Roboto, "Helvetica Neue", sans-serif;
+  background-color: #F8F8F8;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+
+/* Box sizing reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+input {
+  @include input-style();
+}
+
+label {
+  @include label-style();
+}
+
+button {
+  @include button-style();
+}
+
+.forgot-password {
+  @include forgot-password-link-style();
+}
+
+// ---------------------------------------------
+// 🧩 Form Error Animation Class
+.form-error {
+  color: red;
+  margin-top: 0.25rem;
+  font-size: clamp(0.7rem, 1.5vw, 0.8rem);
+  display: block;
+  font-weight: 300;
+  max-height: 0;
+  letter-spacing: 0.7px;
+  opacity: 0;
+  overflow: hidden;
+  transform: translateY(-5px);
+  transition: max-height 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
+
+  &.visible {
+    max-height: 50px; // Adjust based on your design
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.btn-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 100px;
+}
+
+.pagination-controls {
+  display: flex;
+  justify-content: flex-end; // align to one side (right)
+  gap: 0.4rem;
+  margin-top: 1.5rem;
+
+  button {
+    all: unset;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px; // fixed size override
+    height: 30px;
+    min-width: 30px;
+    min-height: 30px;
+    font-size: 0.75rem;
+    border-radius: 0.4rem;
+    background: #f1f5f9;
+    color: #334155;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover:not(:disabled) {
+      background: #e2e8f0;
+      color: #1e293b;
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.4;
+    }
+
+    &.active {
+      background: $primary-color;
+      color: #fff;
+    }
+  }
+
+  .chevron {
+    width: 16px;
+    height: 16px;
+    stroke: #334155;
+    stroke-width: 2;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: transform 0.25s ease, stroke 0.2s ease;
+
+    &:hover {
+      transform: scale(1.1);
+      stroke: #1e293b;
+    }
+  }
+}  
+
+// // Custom Theming for Angular Material
+// // For more information: https://material.angular.io/guide/theming
+// @use '@angular/material' as mat;
+
+// html {
+//   @include mat.theme((
+//     color: (
+//       theme-type: light,
+//       primary: mat.$azure-palette,
+//       tertiary: mat.$blue-palette,
+//     ),
+//     typography: Roboto,
+//     density: 0,
+//   ));
+// }/* You can add global styles to this file, and also import other style files */
+
+// html, body { height: 100%; }
+// body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

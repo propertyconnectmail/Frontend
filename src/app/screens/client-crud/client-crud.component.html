@@ -1,0 +1,218 @@
+<div class="add-professional-wrapper fade-in" *ngIf="this.mode === 'add'">
+
+    <div class="all-professionals-header">
+        <h2>Add Client</h2>
+    </div>
+
+    <form [formGroup]="form" novalidate>
+      <div class="form-grid">
+        <div class="form-section">  
+          <div class="form-group" *ngFor="let field of formFields">
+            <label [for]="field.key">{{ field.label | titlecase }}<span> *</span></label>
+            <input [formControlName]="field.key" [id]="field.key" type="text" [placeholder]="field.placeholder" />
+            <small class="form-error" [class.visible]="form.get(field.key)?.invalid && form.get(field.key)?.touched">{{field.error}}</small>
+          </div>
+  
+          <div class="form-group">
+            <label>Date of Birth <span> *</span></label>
+            <div class="dob-group">
+              <select formControlName="dobMonth" class="dob-select">
+                <option value="" disabled selected>Select Month</option>
+                <option *ngFor="let month of months">{{ month }}</option>
+              </select>
+              <input formControlName="dobDay" class="dob-select" type="number" placeholder="Day" min="1" max="31" />
+              <input formControlName="dobYear" class="dob-select" type="number" placeholder="Year" min="1950" max="2025" />
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-top: 1.2rem;">
+            <div class="dob-group">
+              <div class="dropdown-wrapper">
+                <label for="status">Status <span>*</span></label>
+                <select formControlName="status" class="dob-select" formControlName="status">
+                  <option value="" disabled>Select Status</option>
+                  <option *ngFor="let status of statuses" [value]="status">{{ status.charAt(0).toUpperCase() + status.slice(1) }}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          
+          <div class="actions">
+            <button class="button create" (click)="create()">
+                <div class="btn-inner">
+                    <span *ngIf="!isSubmitting">Create</span>
+                    <span *ngIf="isSubmitting" class="spinner spinner-primary spinner-md"></span>
+                </div>
+            </button>
+            <button type="button" class="button cancel" (click)="discardChanges()">Reset Form</button>
+            <button type="button" class="button cancel" (click)="cancel()">Cancel</button>
+          </div>          
+        </div>
+      </div>
+    </form>
+  </div>
+  
+
+  <div class="add-professional-wrapper fade-in" *ngIf="this.mode === 'view'">
+
+    <div class="all-professionals-header">
+        <h2>View Client</h2>
+    </div>
+
+
+    <form [formGroup]="form" novalidate>
+      <div class="form-grid">
+        <div class="form-section">  
+            <div class="form-group" *ngFor="let field of formFields">
+                <label [for]="field.key">{{ field.label | titlecase }}<span> *</span></label>
+                <input [formControlName]="field.key" [id]="field.key" type="text" [placeholder]="field.placeholder" />
+                <small class="form-error" [class.visible]="form.get(field.key)?.invalid && form.get(field.key)?.touched">{{field.error}}</small>
+              </div>
+      
+              <div class="form-group">
+                <label>Date of Birth <span> *</span></label>
+                <div class="dob-group">
+                  <select formControlName="dobMonth" class="dob-select">
+                    <option value="" disabled selected>Select Month</option>
+                    <option *ngFor="let month of months">{{ month }}</option>
+                  </select>
+                  <input formControlName="dobDay" class="dob-select" type="number" placeholder="Day" min="1" max="31" />
+                  <input formControlName="dobYear" class="dob-select" type="number" placeholder="Year" min="1950" max="2025" />
+                </div>
+              </div>
+    
+              <div class="form-group" style="margin-top: 1.2rem;">
+                <div class="dob-group">
+                  <div class="dropdown-wrapper">
+                    <label for="status">Status <span>*</span></label>
+                    <select formControlName="status" class="dob-select" formControlName="status">
+                      <option value="" disabled>Select Status</option>
+                      <option *ngFor="let status of statuses" [value]="status">{{ status.charAt(0).toUpperCase() + status.slice(1) }}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>   
+          
+          <div class="actions">
+            <button type="button" class="button create" (click)="cancel()">Go Back</button>
+          </div>
+        </div>   
+      </div>
+    </form>
+  </div>
+
+
+
+
+  <div class="add-professional-wrapper fade-in" *ngIf="this.mode === 'edit'">
+
+    <div class="all-professionals-header">
+        <h2>Update Client</h2>
+    </div>
+
+
+    <form [formGroup]="form" novalidate>
+      <div class="form-grid">
+        <div class="form-section">  
+            <div class="form-group" *ngFor="let field of formFields">
+                <label [for]="field.key">{{ field.label | titlecase }}<span> *</span></label>
+                <input [formControlName]="field.key" [id]="field.key" type="text" [placeholder]="field.placeholder" />
+                <small class="form-error" [class.visible]="form.get(field.key)?.invalid && form.get(field.key)?.touched">{{field.error}}</small>
+              </div>
+      
+              <div class="form-group">
+                <label>Date of Birth <span> *</span></label>
+                <div class="dob-group">
+                  <select formControlName="dobMonth" class="dob-select">
+                    <option value="" disabled selected>Select Month</option>
+                    <option *ngFor="let month of months">{{ month }}</option>
+                  </select>
+                  <input formControlName="dobDay" class="dob-select" type="number" placeholder="Day" min="1" max="31" />
+                  <input formControlName="dobYear" class="dob-select" type="number" placeholder="Year" min="1950" max="2025" />
+                </div>
+              </div>
+    
+              <div class="form-group" style="margin-top: 1.2rem;">
+                <div class="dob-group">
+                  <div class="dropdown-wrapper">
+                    <label for="status">Status <span>*</span></label>
+                    <select formControlName="status" class="dob-select" formControlName="status">
+                      <option value="" disabled>Select Status</option>
+                      <option *ngFor="let status of statuses" [value]="status">{{ status.charAt(0).toUpperCase() + status.slice(1) }}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>   
+          
+          <div class="actions">
+            <button class="button create" (click)="update()">
+              <div class="btn-inner">
+                  <span *ngIf="!isSubmitting">Update</span>
+                  <span *ngIf="isSubmitting" class="spinner spinner-primary spinner-md"></span>
+              </div>
+          </button>
+          <button type="button" class="button cancel" (click)="cancel()">Cancel</button>
+          </div>
+        </div>   
+      </div>
+    </form>
+
+  </div>
+  
+
+
+  <div class="add-professional-wrapper fade-in" *ngIf="this.mode === 'delete'">
+
+    <div class="all-professionals-header">
+        <h2>Delete Client</h2>
+    </div>
+
+
+    <form [formGroup]="form" novalidate>
+      <div class="form-grid">
+        <div class="form-section">  
+            <div class="form-group" *ngFor="let field of formFields">
+                <label [for]="field.key">{{ field.label | titlecase }}<span> *</span></label>
+                <input [formControlName]="field.key" [id]="field.key" type="text" [placeholder]="field.placeholder" />
+                <small class="form-error" [class.visible]="form.get(field.key)?.invalid && form.get(field.key)?.touched">{{field.error}}</small>
+              </div>
+      
+              <div class="form-group">
+                <label>Date of Birth <span> *</span></label>
+                <div class="dob-group">
+                  <select formControlName="dobMonth" class="dob-select">
+                    <option value="" disabled selected>Select Month</option>
+                    <option *ngFor="let month of months">{{ month }}</option>
+                  </select>
+                  <input formControlName="dobDay" class="dob-select" type="number" placeholder="Day" min="1" max="31" />
+                  <input formControlName="dobYear" class="dob-select" type="number" placeholder="Year" min="1950" max="2025" />
+                </div>
+              </div>
+    
+              <div class="form-group" style="margin-top: 1.2rem;">
+                <div class="dob-group">
+                  <div class="dropdown-wrapper">
+                    <label for="status">Status <span>*</span></label>
+                    <select formControlName="status" class="dob-select" formControlName="status">
+                      <option value="" disabled>Select Status</option>
+                      <option *ngFor="let status of statuses" [value]="status">{{ status.charAt(0).toUpperCase() + status.slice(1) }}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>   
+          
+          <div class="actions">
+            <button class="button cancel" (click)="delete()">
+              <div class="btn-inner">
+                  <span *ngIf="!isSubmitting">Delete</span>
+                  <span *ngIf="isSubmitting" class="spinner spinner-primary spinner-md"></span>
+              </div>
+          </button>
+          <button type="button" class="button cancel" (click)="cancel()">Cancel</button>
+          </div>
+        </div>   
+      </div>
+    </form>
+
+  </div>
+  

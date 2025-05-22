@@ -1,0 +1,104 @@
+.toast-wrapper {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px; /* This ensures there is space between stacked toasts */
+    z-index: 9999;
+  }
+  
+  .toast {
+    display: flex;
+    align-items: center;
+    padding: 18px 24px;
+    border-radius: 14px;
+    min-width: 320px;
+    max-width: 400px;
+    backdrop-filter: blur(4px);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    animation: slideInFade 0.3s ease-out;
+    font-family: 'Segoe UI', sans-serif;
+    position: relative;
+    
+    /* Ensures the toast content is properly aligned */
+    .toast-icon {
+      font-size: 20px;
+      margin-right: 16px;
+    }
+  
+    .toast-content {
+      flex-grow: 1;
+  
+      .toast-message {
+        margin: 0;
+        font-size: 15.5px;
+        font-weight: 500;
+      }
+    }
+  
+    .toast-close {
+      all: unset;
+      font-size: 18px;
+      line-height: 1;
+      padding: 4px;
+      cursor: pointer;
+      margin-left: 12px;
+      transition: color 0.2s ease;
+    }
+  
+    &.info {
+      border-left: 5px solid #18a0fb;
+      background-color: #e1f5fe; /* Light blue background */
+      color: #166ebd;
+  
+      .toast-close {
+        color: #166ebd;
+  
+        &:hover {
+          color: #0f5ca5;
+        }
+      }
+    }
+  
+    &.error {
+      border-left: 5px solid #e74c3c;
+      background-color: #f8d7da; /* Light red background */
+      color: #b83528;
+  
+      .toast-close {
+        color: #b83528;
+  
+        &:hover {
+          color: #a12e22;
+        }
+      }
+    }
+  
+    &.success {
+      border-left: 5px solid #2ecc71;
+      background-color: #d1f7e7; /* Light green background */
+      color: #1eaa5c;
+  
+      .toast-close {
+        color: #1eaa5c;
+  
+        &:hover {
+          color: #178f4c;
+        }
+      }
+    }
+  }
+  
+  @keyframes slideInFade {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  

@@ -1,0 +1,183 @@
+  <div class="add-professional-wrapper fade-in">
+
+    <!-- Profile Header Section -->
+    <div class="profile-header">
+    <div class="profile-image-wrapper">
+        <img [src]="form.get('url')?.value" alt="Profile Image" />
+        <label for="profileImageInput" class="edit-icon">✎</label>
+        <input
+        type="file"
+        id="profileImageInput"
+        accept="image/*"
+        (change)="onImageSelected($event)"
+        hidden
+        />
+    </div>
+    <div class="profile-info">
+        <h2>{{ form.get('firstName')?.value }} {{ form.get('lastName')?.value }}</h2>
+        <p>{{ form.get('type')?.value | titlecase }}</p>
+    </div>
+    </div>
+
+
+    <div class="all-professionals-header">
+        <h2>Account Settings</h2>
+    </div>
+
+
+    <form [formGroup]="form" novalidate>
+        <div class="form-section three-column-layout">
+            
+            <div class="form-row">
+            <div class="form-group" *ngFor="let field of formFields.slice(0, 3)">
+                <label [for]="field.key">{{ field.label }}<span> *</span></label>
+                <input [formControlName]="field.key" [id]="field.key" type="text" [placeholder]="field.placeholder" />
+                <small class="form-error" [class.visible]="form.get(field.key)?.invalid && form.get(field.key)?.touched">{{ field.error }}</small>
+            </div>
+            </div>
+
+            <div class="form-row">
+            <div class="form-group" *ngFor="let field of formFields.slice(3, 6)">
+                <label [for]="field.key">{{ field.label }}<span> *</span></label>
+                <input [formControlName]="field.key" [id]="field.key" type="text" [placeholder]="field.placeholder" />
+                <small class="form-error" [class.visible]="form.get(field.key)?.invalid && form.get(field.key)?.touched">{{ field.error }}</small>
+            </div>
+            </div>
+
+            <div class="form-row">
+            <div class="form-group">
+                <label for="dobMonth">Month <span>*</span></label>
+                <select formControlName="dobMonth" class="dob-select">
+                <option value="" disabled selected>Select Month</option>
+                <option *ngFor="let month of months">{{ month }}</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="dobDay">Day <span>*</span></label>
+                <input formControlName="dobDay" id="dobDay" type="number" placeholder="Day" min="1" max="31" class="dob-select" />
+            </div>
+
+            <div class="form-group">
+                <label for="dobYear">Year <span>*</span></label>
+                <input formControlName="dobYear" id="dobYear" type="number" placeholder="Year" min="1950" max="2025" class="dob-select" />
+            </div>
+            </div>
+
+             <div class="actions" *ngIf="!isUpdateProfile">
+                <button class="button create" (click)="toggleEdit()">
+                    <div class="btn-inner">
+                    <span *ngIf="!isPasswordSubmitting">Edit Profile</span>
+                    <span *ngIf="isPasswordSubmitting" class="spinner spinner-primary spinner-md"></span>
+                    </div>
+                </button>
+            </div>
+
+            <div class="actions" *ngIf="isUpdateProfile">
+                <button class="button create" (click)="update()">
+                    <div class="btn-inner">
+                    <span *ngIf="!isSubmitting">Update</span>
+                    <span *ngIf="isSubmitting" class="spinner spinner-primary spinner-md"></span>
+                    </div>
+                </button>
+                <button type="button" class="button cancel" (click)="cancel()">Cancel</button>
+            </div>
+        </div>
+    </form>
+
+    <div class="all-professionals-header">
+        <h2>Credential Settings</h2>
+    </div>
+
+
+    <form [formGroup]="passwordForm" novalidate>
+        <div class="form-section three-column-layout">
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="oldPassword">Old Password <span>*</span></label>
+                    <input formControlName="oldPassword" id="oldPassword" type="password" placeholder="Enter current password" />
+                    <small class="form-error" [class.visible]="passwordForm.get('oldPassword')?.invalid && passwordForm.get('oldPassword')?.touched">
+                    Please enter your current password
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <label for="newPassword">New Password <span>*</span></label>
+                    <input formControlName="newPassword" id="newPassword" type="password" placeholder="Enter new password" />
+                    <small class="form-error" [class.visible]="passwordForm.get('newPassword')?.invalid && passwordForm.get('newPassword')?.touched">
+                    Please enter a new password
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Retype New Password <span>*</span></label>
+                    <input formControlName="confirmPassword" id="confirmPassword" type="password" placeholder="Re-enter new password" />
+                    <small class="form-error" [class.visible]="passwordForm.get('confirmPassword')?.invalid && passwordForm.get('confirmPassword')?.touched">
+                    Passwords must match
+                    </small>
+                </div>
+            </div>
+
+            <div class="actions" *ngIf="!isUpdatePassword">
+                <button class="button create" (click)="toggleEditPassword()">
+                    <div class="btn-inner">
+                    <span *ngIf="!isPasswordSubmitting">Change Password</span>
+                    <span *ngIf="isPasswordSubmitting" class="spinner spinner-primary spinner-md"></span>
+                    </div>
+                </button>
+            </div>
+
+            <div class="actions" *ngIf="isUpdatePassword">
+                <button class="button create" (click)="updatePassword()">
+                    <div class="btn-inner">
+                    <span *ngIf="!isSubmitting">Update</span>
+                    <span *ngIf="isSubmitting" class="spinner spinner-primary spinner-md"></span>
+                    </div>
+                </button>
+                <button type="button" class="button cancel" (click)="cancelPassword()">Cancel</button>
+            </div>
+
+        </div>
+    </form>
+
+
+    <div class="all-professionals-header">
+        <h2>Additional Configuration</h2>
+    </div>
+
+
+    <!-- Platform Configuration Card -->
+    <div class="form-section maintenance-section">
+        <div class="section-header">
+            <h4>Platform Configuration</h4>
+            <p class="subtext">Enable or disable maintenance mode for the platform.</p>
+        </div>
+
+        <div class="form-row toggle-row">
+            <label class="toggle-label" for="maintenanceMode">Maintenance Mode</label>
+            <label class="switch">
+                <input
+                type="checkbox"
+                [(ngModel)]="maintenanceMode"
+                (change)="onToggleMaintenance()"
+                id="maintenanceMode" />
+                <span class="slider round"></span>
+            </label>
+        </div>
+    </div>
+
+    <!-- Centered Logout Button -->
+    <div class="logout-wrapper">
+    <button class="button logout" (click)="logout()">
+        <span>Logout</span>
+    </button>
+    </div>
+
+
+
+
+
+
+  </div>
+  

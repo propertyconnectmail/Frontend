@@ -1,0 +1,188 @@
+@use 'sass:color';
+
+// Theme Variables (optional centralization)
+$primary-color: #18A0FB;
+$bg-color: #F8F8F8;
+$font: 'Manrope', sans-serif;
+
+// ---------------------------------------------
+// 🧩 Placeholder Styling Mixin
+@mixin placeholder-color($color) {
+  &::-webkit-input-placeholder {
+    color: $color;
+    opacity: 1;
+  }
+  &::-moz-placeholder {
+    color: $color;
+    opacity: 1;
+  }
+  &:-ms-input-placeholder {
+    color: $color;
+    opacity: 1;
+  }
+  &::placeholder {
+    color: $color;
+    opacity: 1;
+  }
+}
+
+
+
+
+// ------------------------------
+// 🧩 Label Styling Mixin
+@mixin label-style {
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  font-size: clamp(0.9rem, 1.8vw, 1rem);
+  color: #374151; // Gray-700
+  display: block;
+}
+
+
+
+// ---------------------------------------------
+// 🧩 Input Styling Mixin
+@mixin input-style($placeholder-color: #9CA3AF,$invalid-color: red) {
+  color: #343a40;
+  padding: clamp(0.6rem, 1.5vw, 0.75rem);
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: clamp(0.9rem, 1.8vw, 1rem);
+  transition: border-color 0.3s;
+  width: 100%;
+  box-sizing: border-box;
+
+  &:focus {
+    border-color: $primary-color;
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+
+  @include placeholder-color(#9CA3AF);
+
+  &.ng-invalid.ng-touched {
+    border-color: $invalid-color;
+    transition: border-color 0.3s ease;
+  }
+}
+
+
+
+// ------------------------------
+// 🧩 Forgot Password Link Styling Mixin
+@mixin forgot-password-link-style($color: $primary-color) {
+  text-align: right;
+
+  a {
+    font-size: clamp(0.8rem, 1.5vw, 0.9rem);
+    color: $color;
+    text-decoration: none;
+
+    &:hover {
+      color: darken($color, 10%); // Slightly darker on hover
+      text-decoration: underline;
+      transition: color 0.3s ease;
+    }
+  }
+}
+
+
+
+@mixin button-style($bg: $primary-color, $text-color: white) {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 120px;
+  min-height: 44px;
+  height: 20px; // Fix the vertical height of the content
+  padding: clamp(0.7rem, 2vw, 0.8rem);
+  border: none;
+  border-radius: 6px;
+  background-color: $bg;
+  color: $text-color;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: clamp(0.95rem, 2vw, 1rem);
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease, min-height 0.3s ease;
+  box-shadow: 0 4px 10px rgba($bg, 0.2);
+  overflow: hidden;
+
+  &:hover {
+    background-color: color.adjust($bg, $lightness: -7%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba($bg, 0.3);
+  }
+
+  &:active {
+    box-shadow: 0 2px 6px rgba($bg, 0.2);
+  }
+
+  &:disabled {
+    background-color: color.adjust($bg, $lightness: 20%);
+    cursor: not-allowed;
+    box-shadow: none;
+    opacity: 0.7;
+  }
+
+  // Optional: nested helper for content transition
+  .btn-inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+
+    span, .spinner {
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+  }
+}
+
+
+
+
+
+// Spinner Keyframes
+@keyframes spin {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+// Spinner Base
+.spinner {
+  display: inline-block;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  box-sizing: border-box;
+  margin: 0 auto;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  opacity: 1;
+  transform: scale(1);
+}
+
+// Mixin: Spinner size
+@mixin spinner-size($size, $thickness: 3px) {
+  width: $size;
+  height: $size;
+  border: $thickness solid rgba(255, 255, 255, 0.4);
+  border-top: $thickness solid white;
+}
+
+// Utility classes
+.spinner-sm { @include spinner-size(16px); }
+.spinner-md { @include spinner-size(20px); }
+.spinner-lg { @include spinner-size(28px); }
+.spinner-xl { @include spinner-size(36px, 4px); }
+
+// Modifier: dark spinner (for light backgrounds)
+.spinner-dark {
+  border-color: rgba(0, 0, 0, 0.1);
+  border-top-color: #333;
+}
+
+// Modifier: primary spinner
+.spinner-primary {
+  border-color: rgba(#dfd6d6, 0.2);
+  border-top-color: #dfd6d6;
+}

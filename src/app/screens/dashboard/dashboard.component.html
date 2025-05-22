@@ -1,0 +1,133 @@
+<div class="dashboard-container" [@fadeIn] >
+
+  <div class="dashboard-header">
+    <h2>Analytics</h2>
+  </div>
+
+<!-- Analytics Section -->
+<div class="analytics-section">
+  <ng-container *ngIf="loadingPlatformConfig; else loadedCards">
+    <div class="analytics-card shimmer" *ngFor="let _ of [1, 2, 3, 4]">
+      <div class="card-content">
+        <div class="shimmer-line title"></div>
+        <div class="shimmer-line value"></div>
+      </div>
+      <div class="shimmer-icon"></div>
+    </div>
+  </ng-container>
+
+  <ng-template #loadedCards>
+    <div
+      class="analytics-card"
+      *ngFor="let card of analyticsCards"
+      (click)="onCardClick(card)"
+      [@bounceOnTap]
+      tabindex="0"
+      role="button"
+    >
+      <div class="card-content">
+        <h3>{{ card.title }}</h3>
+        <p>{{ card.value }}</p>
+      </div>
+      <img [src]="card.icon" alt="{{ card.title }}" class="card-icon" />
+    </div>
+  </ng-template>
+</div>
+
+
+
+  <!-- Recent Activity Feed -->
+  <div class="activity-header">
+    <h2>Recent Activity Feed</h2>
+    <button (click)="goToLogs()" class="new-btn">
+      All Logs
+    </button>
+  </div>
+
+  <!-- Initial shimmer on first load -->
+  <div class="shimmer-wrapper" *ngIf="initialLoad">
+    <div class="shimmer-line" *ngFor="let i of [1,2,3]"></div>
+  </div>
+
+  <div
+  class="activity-feed"
+  [@fadeBounceAnimation]="staticTrigger"
+  *ngIf="!initialLoad && paginatedActivity.length"
+>
+  <div
+    class="activity-card"
+    *ngFor="let activity of paginatedActivity"
+    [ngClass]="{
+      'create': activity.actionType === 'create',
+      'update': activity.actionType === 'update',
+      'delete': activity.actionType === 'delete'
+    }"
+  >
+    <img src="assets/activity-feed.svg" alt="Activity" class="activity-icon" />
+    <div class="activity-content">
+      <p class="description">{{ activity.description }}</p>
+      <span class="meta">
+        <span class="performed-by">by {{ activity.performedBy }}</span>
+        <span class="timestamp">{{ activity.date }}</span>
+      </span>
+    </div>
+    <span class="activity-id">#{{ activity.id }}</span>
+  </div>
+</div>
+
+
+
+<div class="pagination-controls">
+  <button (click)="prevPage()" [disabled]="currentPage === 1" aria-label="Previous Page">
+    <svg viewBox="0 0 24 24" class="chevron chevron-left">
+      <path d="M15 6l-6 6 6 6" />
+    </svg>
+  </button>
+
+  <!-- Show first page -->
+  <button
+    *ngIf="totalPages > 1"
+    [class.active]="currentPage === 1"
+    (click)="goToPage(1)"
+    [attr.aria-current]="currentPage === 1 ? 'page' : null"
+    aria-label="Go to page 1"
+  >
+    1
+  </button>
+
+  <!-- Leading ellipsis -->
+  <span *ngIf="currentPage > 4">...</span>
+
+  <!-- Visible page range -->
+  <button
+    *ngFor="let page of visiblePages"
+    [class.active]="currentPage === page"
+    (click)="goToPage(page)"
+    [attr.aria-current]="currentPage === page ? 'page' : null"
+    [attr.aria-label]="'Go to page ' + page"
+  >
+    {{ page }}
+  </button>
+
+  <!-- Trailing ellipsis -->
+  <span *ngIf="currentPage < totalPages - 3">...</span>
+
+  <!-- Show last page -->
+  <button
+    *ngIf="totalPages > 1"
+    [class.active]="currentPage === totalPages"
+    (click)="goToPage(totalPages)"
+    [attr.aria-current]="currentPage === totalPages ? 'page' : null"
+    [attr.aria-label]="'Go to page ' + totalPages"
+  >
+    {{ totalPages }}
+  </button>
+
+  <button (click)="nextPage()" [disabled]="currentPage === totalPages" aria-label="Next Page">
+    <svg viewBox="0 0 24 24" class="chevron chevron-right">
+      <path d="M9 6l6 6-6 6" />
+    </svg>
+  </button>
+</div>
+  
+</div>

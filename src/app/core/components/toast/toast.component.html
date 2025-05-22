@@ -1,0 +1,16 @@
+<div class="toast-wrapper">
+    <div *ngFor="let toastMessage of toastMessage$ | async" class="toast" [ngClass]="toastMessage?.type">
+      <div class="toast-icon">
+        <ng-container [ngSwitch]="toastMessage?.type">
+          <div *ngSwitchCase="'success'">✓</div>
+          <div *ngSwitchCase="'error'">⚠</div>
+          <div *ngSwitchCase="'info'">ℹ</div>
+        </ng-container>
+      </div>
+      <div class="toast-content">
+        <p class="toast-message">{{ toastMessage?.message }}</p>
+      </div>
+      <button (click)="clearToast(toastMessage)" class="toast-close">×</button>
+    </div>
+</div>
+  
