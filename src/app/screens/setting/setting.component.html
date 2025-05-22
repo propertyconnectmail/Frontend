@@ -142,13 +142,13 @@
     </form>
 
 
-    <div class="all-professionals-header">
+    <div class="all-professionals-header" *ngIf="isAdmin()">
         <h2>Additional Configuration</h2>
     </div>
 
 
     <!-- Platform Configuration Card -->
-    <div class="form-section maintenance-section">
+    <div class="form-section maintenance-section" *ngIf="isAdmin()">
         <div class="section-header">
             <h4>Platform Configuration</h4>
             <p class="subtext">Enable or disable maintenance mode for the platform.</p>

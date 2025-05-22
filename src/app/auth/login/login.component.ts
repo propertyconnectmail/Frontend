@@ -5,6 +5,7 @@ import { AuthService } from '../../core/services/auth/auth.service';
 import {trigger, transition, style, animate} from '@angular/animations';
 import { Router } from '@angular/router';
 import { ToastService } from '../../core/services/toast/toast.service';
+import { UserstateService } from '../../core/services/userstate/userstate.service';
 
 @Component({
   selector: 'app-login',
@@ -31,7 +32,7 @@ export class LoginComponent {
   isSubmitting = false;
   loginError: string | null = null;
 
-  constructor(private fb: FormBuilder,private authService: AuthService, private router : Router, private toastService : ToastService) {
+  constructor(private fb: FormBuilder,private authService: AuthService, private router : Router, private toastService : ToastService, private userStateService : UserstateService) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
@@ -67,6 +68,7 @@ export class LoginComponent {
           this.toastService.showToast('Login Successful!', 'info');
           localStorage.setItem('user', JSON.stringify(res));
           this.authService.setLoginState(true);
+          this.userStateService.setLoginState(true); // <-- ADD THIS LINE
           this.router.navigate(['/dashboard'])
           return
         }

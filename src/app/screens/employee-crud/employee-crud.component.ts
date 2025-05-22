@@ -125,8 +125,10 @@ export class EmployeeCrudComponent implements OnInit {
         type: [''] // Default value for status, can be changed
       });
   
+      if(this.mode === 'add'){
         this.form.get('firstName')?.valueChanges.subscribe(() => this.setAutoPassword());
         this.form.get('dobYear')?.valueChanges.subscribe(() => this.setAutoPassword());
+      }
     }
   
     loadData(employee : any) : void{
@@ -252,6 +254,7 @@ export class EmployeeCrudComponent implements OnInit {
         let employee: any = {
           ...rest,
           dob:  this.setMonth(),
+          password: this.form.get('password')?.value
         };
   
         this.isSubmitting = true;

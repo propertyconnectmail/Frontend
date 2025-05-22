@@ -125,7 +125,7 @@ export class ClientCrudComponent implements OnInit {
         status: [''], // Default value for status, can be changed
       });
   
-      if(this.mode = 'add'){
+      if(this.mode === 'add'){
         this.form.get('firstName')?.valueChanges.subscribe(() => this.setAutoPassword());
         this.form.get('dobYear')?.valueChanges.subscribe(() => this.setAutoPassword());
       }

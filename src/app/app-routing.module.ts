@@ -18,6 +18,7 @@ import { SettingComponent } from './screens/setting/setting.component';
 import { loginGuard } from './_guards/login/login.guard';
 import { authGuard } from './_guards/auth/auth.guard';
 import { adminGuard } from './_guards/admin/admin.guard';
+import { RestrictedAccessComponent } from './components/restricted-access/restricted-access.component';
 
 
 const routes: Routes = [
@@ -41,7 +42,7 @@ const routes: Routes = [
   { path: 'log', component: LogsComponent, canActivate: [authGuard] },
   { path: 'payments', component: PaymentComponent, canActivate: [authGuard] },
   { path: 'settings', component: SettingComponent, canActivate: [authGuard] },
-
+  { path: 'restricted', component: RestrictedAccessComponent },
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
   { path: '**', redirectTo: '/dashboard' }
 ];

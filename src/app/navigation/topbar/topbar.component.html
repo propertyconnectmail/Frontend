@@ -3,8 +3,8 @@
     <h2 class="page-title">{{pageTitle}}</h2>
     <div class="profile-info">
     <span class="name-role">
-        <strong></strong>
-        <small> </small>
+        <strong>{{ name }}</strong>
+        <small>{{ type | titlecase }}</small>
     </span>
     <img [src]="imageUrl" alt="Profile" class="profile-img" routerLink="/settings"/>
     </div>

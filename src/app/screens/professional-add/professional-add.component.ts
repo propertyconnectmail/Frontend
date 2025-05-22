@@ -160,7 +160,7 @@ export class ProfessionalAddComponent implements OnInit {
       certifications: [[]], 
     });
 
-    if(this.mode = 'add'){
+    if(this.mode === 'add'){
       this.form.get('firstName')?.valueChanges.subscribe(() => this.setAutoPassword());
       this.form.get('dobYear')?.valueChanges.subscribe(() => this.setAutoPassword());
     }
@@ -362,6 +362,7 @@ export class ProfessionalAddComponent implements OnInit {
       let professional: Professional = {
         ...rest,
         dob:  this.setMonth(),
+        password: this.form.get('password')?.value
       };
       
       console.log(professional)

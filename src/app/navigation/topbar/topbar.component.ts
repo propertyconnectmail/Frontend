@@ -3,6 +3,7 @@ import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { EmployeeService } from '../../_services/employee/employee.service';
 import { UserstateService } from '../../core/services/userstate/userstate.service';
+import { AuthService } from '../../core/services/auth/auth.service';
 
 @Component({
   selector: 'app-topbar',
@@ -16,22 +17,26 @@ export class TopbarComponent implements OnInit {
   name = "";
   type = "";
 
-  constructor(private router: Router, private employeeService : EmployeeService, private cdref: ChangeDetectorRef, private userstateService : UserstateService) {}
+  constructor(private router: Router, private employeeService : EmployeeService, private cdref: ChangeDetectorRef, private userstateService : UserstateService, private authService : AuthService) {}
 
   ngOnInit(): void {
-    const storedUser : any = localStorage.getItem('user');
-    const user = JSON.parse(storedUser);
-
-    this.employeeService.getEmployeeForm({email : user.email}).subscribe(async(employee:any)=>{
-      this.imageUrl = employee.url;
-      this.name = employee.firstName+ ' '+employee.lastName;
-      this.type = employee.type;
-      this.setPageTitle(this.router.url);
-    })
+    
+    this.authService.isLoggedIn().subscribe((isLoggedIn: any) => {
+      if (isLoggedIn) {
+        this.loadUserDetails();
+      }
+    });
 
     this.userstateService.imageUrl$.subscribe(newUrl => {
       if (newUrl) {
         this.imageUrl = newUrl;
+      }
+    });
+
+    // React to login state
+    this.userstateService.loginState$.subscribe((isLoggedIn: boolean) => {
+      if (isLoggedIn) {
+        this.loadUserDetails();
       }
     });
 
@@ -41,6 +46,19 @@ export class TopbarComponent implements OnInit {
     ).subscribe(() => {
       this.setPageTitle(this.router.url);
     });
+  }
+
+  loadUserDetails(): void {
+    const storedUser: any = localStorage.getItem('user');
+    if (storedUser) {
+      const user = JSON.parse(storedUser);
+
+      this.employeeService.getEmployeeForm({ email: user.email }).subscribe((employee: any) => {
+        this.imageUrl = employee.url;
+        this.name = employee.firstName + ' ' + employee.lastName;
+        this.type = employee.type;
+      });
+    }
   }
 
   setProfileImage(url:string): void{
@@ -79,6 +97,8 @@ export class TopbarComponent implements OnInit {
       this.pageTitle = 'Payment Management';
     }else if (url.startsWith('/settings')){
       this.pageTitle = 'Profile Management';
+    }else if (url.startsWith('/restricted')){
+      this.pageTitle = 'Restricted Access';
     }else {
       // For exact matches, use the routeMap
       this.pageTitle = routeMap[url] || 'Dashboard'; // Default to Dashboard if no match

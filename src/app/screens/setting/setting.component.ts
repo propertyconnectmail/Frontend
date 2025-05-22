@@ -163,6 +163,12 @@ export class SettingComponent implements OnInit {
         }
       });
     }
+
+    
+    isAdmin(): boolean {
+      return this.form.get('type')?.value === 'admin';
+    }
+
   
   
     update() : void {
