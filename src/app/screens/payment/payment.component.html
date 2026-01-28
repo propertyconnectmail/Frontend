@@ -14,31 +14,68 @@
           <table>
             <thead>
               <tr cdkDropList [cdkDropListData]="draggableColumns" (cdkDropListDropped)="drop($event)" cdkDropListOrientation="horizontal">
-                <th>#</th> <!-- Numeric index column -->
+                <th>#</th>
                 <th *ngFor="let col of draggableColumns" cdkDrag>{{ col.label }}</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let prof of paginatedData; let i = index" [class.even]="i % 2 === 0">
-                <td>{{ i + 1 }}</td> <!-- Numeric ID based on index -->
+                <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
                 
                 <!-- Draggable columns -->
                 <td *ngFor="let col of draggableColumns">
                   <ng-container [ngSwitch]="col.key">
+                    <!-- Client Name with Avatar -->
+                    <ng-container *ngSwitchCase="'clientName'">
+                      <div class="user-cell">
+                        <img [src]="prof.clientUrl" [alt]="prof.clientName" class="user-avatar" />
+                        <span>{{ prof.clientName }}</span>
+                      </div>
+                    </ng-container>
+                    
+                    <!-- Professional Name with Avatar -->
+                    <ng-container *ngSwitchCase="'professionalName'">
+                      <div class="user-cell">
+                        <img [src]="prof.professionalUrl" [alt]="prof.professionalName" class="user-avatar" />
+                        <span>{{ prof.professionalName }}</span>
+                      </div>
+                    </ng-container>
+                    
+                    <!-- Payment Status Badge -->
+                    <ng-container *ngSwitchCase="'professionalPaymentStatus'">
+                      <span class="status-badge" [ngClass]="prof.professionalPaymentStatus">
+                        {{ capitalizeWords(prof.professionalPaymentStatus) }}
+                      </span>
+                    </ng-container>
+                    
+                    <!-- Currency formatting for amounts -->
+                    <ng-container *ngSwitchCase="'totalPaymentAmount'">
+                      Rs. {{ prof.totalPaymentAmount | number:'1.2-2' }}
+                    </ng-container>
+                    
                     <ng-container *ngSwitchDefault>
                       {{ prof[col.key] }}
                     </ng-container>
                   </ng-container>
                 </td>
+                
+                <!-- Action Buttons -->
+                <td>
+                  <div class="action-buttons">
+                    <button class="view-btn" (click)="openPaymentModal(prof)" title="View Payment Details">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                      </svg>
+                    </button>
+                  </div>
+                </td>
               </tr>
             </tbody>
           </table>
-          
-          
-          
         </div>  
       <div class="table-footer" style="display: flex; justify-content: flex-end;">
-        <!-- Use your pagination code here -->
         <!-- Pagination Controls -->
         <div class="pagination-controls">
           <button (click)="prevPage()" [disabled]="currentPage === 1" aria-label="Previous Page">
@@ -47,7 +84,6 @@
             </svg>
           </button>
         
-          <!-- Show first page -->
           <button
             *ngIf="totalPages > 1"
             [class.active]="currentPage === 1"
@@ -58,10 +94,8 @@
             1
           </button>
         
-          <!-- Leading ellipsis -->
           <span *ngIf="currentPage > 4">...</span>
         
-          <!-- Visible page range -->
           <button
             *ngFor="let page of visiblePages"
             [class.active]="currentPage === page"
@@ -72,10 +106,8 @@
             {{ page }}
           </button>
         
-          <!-- Trailing ellipsis -->
           <span *ngIf="currentPage < totalPages - 3">...</span>
         
-          <!-- Show last page -->
           <button
             *ngIf="totalPages > 1"
             [class.active]="currentPage === totalPages"
@@ -92,8 +124,176 @@
             </svg>
           </button>
         </div>
-        
       </div>
     </div>
+</div>
+
+<!-- Payment Details Modal -->
+<div class="modal-overlay" *ngIf="isModalOpen" (click)="closeModal()" [@fadeInOut]>
+  <div class="modal-container" (click)="$event.stopPropagation()" [@slideIn]>
+    
+    <!-- Modal Header -->
+    <div class="modal-header">
+      <h3>Payment Details</h3>
+      <button class="close-btn" (click)="closeModal()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+    
+    <!-- Modal Body -->
+    <div class="modal-body" *ngIf="selectedPayment">
+      
+      <!-- Appointment Info Banner -->
+      <div class="appointment-banner">
+        <div class="appointment-id">
+          <span class="label">Appointment ID</span>
+          <span class="value">{{ selectedPayment.appointmentId }}</span>
+        </div>
+        <div class="appointment-date">
+          <span class="label">Date & Time</span>
+          <span class="value">{{ selectedPayment.appointmentDate }} at {{ selectedPayment.appointmentTime }}</span>
+        </div>
+        <div class="appointment-status">
+          <span class="status-badge" [ngClass]="selectedPayment.appointmentStatus">
+            {{ capitalizeWords(selectedPayment.appointmentStatus) }}
+          </span>
+        </div>
+      </div>
+      
+      <!-- Payment Flow Section -->
+      <div class="payment-flow-section">
+        <h4>Payment Flow</h4>
+        
+        <div class="payment-flow">
+          <!-- Client (Payer) -->
+          <div class="party-card payer">
+            <div class="party-header">
+              <span class="party-label">Paid By (Client)</span>
+            </div>
+            <div class="party-content">
+              <img [src]="selectedPayment.clientUrl" [alt]="selectedPayment.clientName" class="party-avatar" />
+              <div class="party-info">
+                <span class="party-name">{{ selectedPayment.clientName }}</span>
+                <span class="party-email">{{ selectedPayment.clientEmail }}</span>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Flow Arrow -->
+          <div class="flow-arrow">
+            <div class="arrow-line"></div>
+            <div class="arrow-amount">Rs. {{ selectedPayment.totalPaymentAmount | number:'1.2-2' }}</div>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </div>
+          
+          <!-- Professional (Payee) -->
+          <div class="party-card payee">
+            <div class="party-header">
+              <span class="party-label">Paid To (Professional)</span>
+            </div>
+            <div class="party-content">
+              <img [src]="selectedPayment.professionalUrl" [alt]="selectedPayment.professionalName" class="party-avatar" />
+              <div class="party-info">
+                <span class="party-name">{{ selectedPayment.professionalName }}</span>
+                <span class="party-email">{{ selectedPayment.professionalEmail }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Payment Breakdown Section -->
+      <div class="payment-breakdown-section">
+        <h4>Payment Breakdown</h4>
+        
+        <div class="breakdown-grid">
+          <div class="breakdown-item total">
+            <div class="breakdown-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                <line x1="1" y1="10" x2="23" y2="10"></line>
+              </svg>
+            </div>
+            <div class="breakdown-details">
+              <span class="breakdown-label">Total Amount</span>
+              <span class="breakdown-value">Rs. {{ selectedPayment.totalPaymentAmount | number:'1.2-2' }}</span>
+            </div>
+          </div>
+          
+          <div class="breakdown-item professional">
+            <div class="breakdown-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+            </div>
+            <div class="breakdown-details">
+              <span class="breakdown-label">Professional Fee</span>
+              <span class="breakdown-value">Rs. {{ selectedPayment.professionalPaymentAmount | number:'1.2-2' }}</span>
+            </div>
+          </div>
+          
+          <div class="breakdown-item commission">
+            <div class="breakdown-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="16"></line>
+                <line x1="8" y1="12" x2="16" y2="12"></line>
+              </svg>
+            </div>
+            <div class="breakdown-details">
+              <span class="breakdown-label">Platform Commission</span>
+              <span class="breakdown-value">Rs. {{ selectedPayment.commission | number:'1.2-2' }}</span>
+            </div>
+          </div>
+          
+          <div class="breakdown-item transaction">
+            <div class="breakdown-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                <polyline points="17 6 23 6 23 12"></polyline>
+              </svg>
+            </div>
+            <div class="breakdown-details">
+              <span class="breakdown-label">Transaction Fee</span>
+              <span class="breakdown-value">Rs. {{ selectedPayment.transactionFee | number:'1.2-2' }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Payment Status Section -->
+      <div class="payment-status-section">
+        <h4>Payment Status</h4>
+        <div class="status-card">
+          <div class="status-indicator" [ngClass]="selectedPayment.professionalPaymentStatus">
+            <span class="status-dot"></span>
+            <span class="status-text">{{ capitalizeWords(selectedPayment.professionalPaymentStatus) }}</span>
+          </div>
+          <div class="status-meta">
+            <span class="meta-item">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+              Created: {{ selectedPayment.createdAt | date:'medium' }}
+            </span>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+    
+    <!-- Modal Footer -->
+    <div class="modal-footer">
+      <button class="btn-secondary" (click)="closeModal()">Close</button>
+    </div>
+    
   </div>
-  
+</div>

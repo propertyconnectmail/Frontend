@@ -38,7 +38,7 @@
                 <label for="type">Type <span>*</span></label>
                 <select formControlName="type" class="dob-select">
                   <option value="" disabled>Select Type</option>
-                  <option *ngFor="let type of types" [value]="type">{{ type.charAt(0).toUpperCase() + type.slice(1) }}</option>
+                  <option *ngFor="let type of types" [value]="type">{{ type | titlecase }}</option>
                 </select>
               </div>
             </div>
@@ -101,7 +101,7 @@
                 <label for="type">Type <span>*</span></label>
                 <select formControlName="type" class="dob-select">
                     <option value="" disabled>Select Type</option>
-                    <option *ngFor="let type of types" [value]="type">{{ type.charAt(0).toUpperCase() + type.slice(1) }}</option>
+                    <option *ngFor="let type of types" [value]="type">{{ type | titlecase }}</option>
                 </select>
                 </div>
             </div>
@@ -159,7 +159,7 @@
                     <label for="type">Type <span>*</span></label>
                     <select formControlName="type" class="dob-select">
                         <option value="" disabled>Select Type</option>
-                        <option *ngFor="let type of types" [value]="type">{{ type.charAt(0).toUpperCase() + type.slice(1) }}</option>
+                        <option *ngFor="let type of types" [value]="type">{{ type | titlecase }}</option>
                     </select>
                     </div>
                 </div>
@@ -223,7 +223,7 @@
                     <label for="type">Type <span>*</span></label>
                     <select formControlName="type" class="dob-select">
                         <option value="" disabled>Select Type</option>
-                        <option *ngFor="let type of types" [value]="type">{{ type.charAt(0).toUpperCase() + type.slice(1) }}</option>
+                        <option *ngFor="let type of types" [value]="type">{{ type | titlecase }}</option>
                     </select>
                     </div>
                 </div>

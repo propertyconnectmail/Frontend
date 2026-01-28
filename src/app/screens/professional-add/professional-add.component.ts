@@ -31,6 +31,7 @@ export class ProfessionalAddComponent implements OnInit {
   isFileInputDisabled = false; // or false to enable it
 
   downloadedFiles: DownloadedFiles[] = [];
+  identityImageUrl: string | null = null;
 
 
   months = [
@@ -91,6 +92,7 @@ export class ProfessionalAddComponent implements OnInit {
               console.log(this.downloadedFiles)
               return { name, url };
             });
+            this.identityImageUrl = professional.identityImage || null;
           }else {
             this.toastService.showToast('Error loading data. Try again later!', 'error');
           }
@@ -110,6 +112,7 @@ export class ProfessionalAddComponent implements OnInit {
               const name = url.split('/').pop(); // Extract filename from URL
               return { name, url };
             });
+            this.identityImageUrl = professional.identityImage || null;
           }else {
             this.toastService.showToast('Error loading data. Try again later!', 'error');
           }
@@ -132,6 +135,7 @@ export class ProfessionalAddComponent implements OnInit {
               const name = url.split('/').pop(); // Extract filename from URL
               return { name, url };
             });
+            this.identityImageUrl = professional.identityImage || null;
           }else {
             this.toastService.showToast('Error loading data. Try again later!', 'error');
           }
@@ -198,7 +202,7 @@ export class ProfessionalAddComponent implements OnInit {
     const docs = this.downloadedFiles;
     if (docs.length === 0) return;
 
-    const apiUrl = 'https://propertconnectbackend.onrender.com/api/certifications/download-zip'; // ✅ same as mobile app
+    const apiUrl = 'https://backendv2-gyp9.onrender.com/api/certifications/download-zip'; 
     const params = new URLSearchParams();
 
     docs.forEach(file => {
@@ -208,7 +212,15 @@ export class ProfessionalAddComponent implements OnInit {
     });
 
     const downloadUrl = `${apiUrl}?${params.toString()}`;
-    window.open(downloadUrl, '_blank'); // 🔁 Opens download link in new tab
+    window.open(downloadUrl, '_blank'); 
+  }
+
+  downloadIdentityImage(): void {
+    if (this.identityImageUrl) {
+      const apiUrl = 'https://backendv2-gyp9.onrender.com/api/download-file';
+      const downloadUrl = `${apiUrl}?url=${encodeURIComponent(this.identityImageUrl)}`;
+      window.open(downloadUrl, '_blank');
+    }
   }
 
   

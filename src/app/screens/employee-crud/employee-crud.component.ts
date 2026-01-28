@@ -174,7 +174,7 @@ export class EmployeeCrudComponent implements OnInit {
     ];
   
     statuses = ['active', 'blocked'];    
-    types = ['employee', 'admin'];    
+    types = ['business admin', 'operations officer'];    
   
     discardChanges(): void {
       this.form.reset();

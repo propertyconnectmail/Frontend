@@ -56,22 +56,35 @@
             <button type="button" class="button cancel" (click)="cancel()">Cancel</button>
           </div>          
         </div>
-  
-        <div class="upload-section">
-          <label class="upload-label">
-            <div class="upload-box" [class.filled]="uploadedFiles.length">
-              <ng-container *ngIf="uploadedFiles.length; else noFile">
-                <div class="file-preview" *ngFor="let file of uploadedFiles">
-                  📄 {{ file.name }}
-                </div>
-              </ng-container>
-              <ng-template #noFile>
-                <img src="assets/icons/cloud-upload.svg" alt="Upload" />
-                <p style="line-height: 1.5rem;">Click Here to Upload Certification Files. Accepted file formats: PDF, DOC, or DOCX. (Maximum 10)</p>
-              </ng-template>
+
+        <div class="right-column">
+          <div class="upload-section">
+            <label class="upload-label">
+              <div class="upload-box" [class.filled]="uploadedFiles.length">
+                <ng-container *ngIf="uploadedFiles.length; else noFile">
+                  <div class="file-preview" *ngFor="let file of uploadedFiles">
+                    📄 {{ file.name }}
+                  </div>
+                </ng-container>
+                <ng-template #noFile>
+                  <img src="assets/icons/cloud-upload.svg" alt="Upload" />
+                  <p style="line-height: 1.5rem;">Click Here to Upload Certification Files. Accepted file formats: PDF, DOC, or DOCX. (Maximum 10)</p>
+                </ng-template>
+              </div>
+              <input type="file" (change)="onFileSelected($event)" multiple hidden accept=".pdf, .doc, .docx, application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"/>
+            </label>
+          </div>
+
+          <!-- Identity Image Section - Add as a new card -->
+          <div class="identity-section" *ngIf="identityImageUrl">
+            <label class="section-label">Identity Verification Photo</label>
+            <div class="identity-box">
+              <img [src]="identityImageUrl" alt="Identity Photo" class="identity-image" />
             </div>
-            <input type="file" (change)="onFileSelected($event)" multiple hidden accept=".pdf, .doc, .docx, application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"/>
-          </label>
+            <div class="actions">
+              <button type="button" class="button create" (click)="downloadIdentityImage()">Download Image</button>
+            </div>
+          </div>
         </div>
       </div>
     </form>
@@ -133,23 +146,40 @@
         
   
         <div class="upload-section">
-          <label class="upload-label">
-            <div class="upload-box" [class.filled]="downloadedFiles.length">
-              <ng-container *ngIf="downloadedFiles.length; else noFile">
-                <div class="file-preview" *ngFor="let file of downloadedFiles">
-                  📄 {{ file.name }}
-                </div>
-              </ng-container>
-              <ng-template #noFile>
-                <img src="assets/icons/cloud-upload.svg" alt="Upload" />
-                <p style="line-height: 1.5rem;">Click Here to Upload Certification Files. Accepted file formats: PDF, DOC, or DOCX. (Maximum 10)</p>
-              </ng-template>
-            </div>
-            <input type="file" (change)="onFileSelected($event)" multiple hidden [disabled]="isFileInputDisabled"/>
-          </label>
+          
+        </div>
 
-          <div class="actions" style="display: flex; justify-content: flex-end; margin-top: 3rem;">
-            <button type="button" class="button create" (click)="downloadFilesAsZip()">Download Files</button>
+        <div class="right-column">
+          <div class="upload-section">
+            <label class="upload-label">
+              <div class="upload-box" [class.filled]="downloadedFiles.length">
+                <ng-container *ngIf="downloadedFiles.length; else noFile">
+                  <div class="file-preview" *ngFor="let file of downloadedFiles">
+                    📄 {{ file.name }}
+                  </div>
+                </ng-container>
+                <ng-template #noFile>
+                  <img src="assets/icons/cloud-upload.svg" alt="Upload" />
+                  <p style="line-height: 1.5rem;">Click Here to Upload Certification Files. Accepted file formats: PDF, DOC, or DOCX. (Maximum 10)</p>
+                </ng-template>
+              </div>
+              <input type="file" (change)="onFileSelected($event)" multiple hidden [disabled]="isFileInputDisabled"/>
+            </label>
+
+            <div class="actions" style="display: flex; justify-content: flex-end; margin-top: 3rem;">
+              <button type="button" class="button create" (click)="downloadFilesAsZip()">Download Files</button>
+            </div>
+          </div>
+
+          <!-- Identity Image Section - Add as a new card -->
+          <div class="identity-section" *ngIf="identityImageUrl">
+            <label class="section-label">Identity Verification Photo</label>
+            <div class="identity-box">
+              <img [src]="identityImageUrl" alt="Identity Photo" class="identity-image" />
+            </div>
+            <div class="actions">
+              <button type="button" class="button create" (click)="downloadIdentityImage()">Download Image</button>
+            </div>
           </div>
         </div>
       </div>
@@ -217,23 +247,36 @@
           <button type="button" class="button cancel" (click)="cancel()">Cancel</button>
           </div>
         </div>   
-        
-  
-        <div class="upload-section">
-          <label class="upload-label">
-            <div class="upload-box" [class.filled]="downloadedFiles.length">
-              <ng-container *ngIf="downloadedFiles.length; else noFile">
-                <div class="file-preview" *ngFor="let file of downloadedFiles">
-                  📄 {{ file.name }}
-                </div>
-              </ng-container>
-              <ng-template #noFile>
-                <img src="assets/icons/cloud-upload.svg" alt="Upload" />
-                <p style="line-height: 1.5rem;">Click Here to Upload Certification Files. Accepted file formats: PDF, DOC, or DOCX. (Maximum 10)</p>
-              </ng-template>
+
+
+        <div class="right-column">
+          <div class="upload-section">
+            <label class="upload-label">
+              <div class="upload-box" [class.filled]="downloadedFiles.length">
+                <ng-container *ngIf="downloadedFiles.length; else noFile">
+                  <div class="file-preview" *ngFor="let file of downloadedFiles">
+                    📄 {{ file.name }}
+                  </div>
+                </ng-container>
+                <ng-template #noFile>
+                  <img src="assets/icons/cloud-upload.svg" alt="Upload" />
+                  <p style="line-height: 1.5rem;">Click Here to Upload Certification Files. Accepted file formats: PDF, DOC, or DOCX. (Maximum 10)</p>
+                </ng-template>
+              </div>
+              <input type="file" (change)="onFileSelected($event)" multiple hidden [disabled]="isFileInputDisabled"/>
+            </label>
+          </div>
+
+          <!-- Identity Image Section - Add as a new card -->
+          <div class="identity-section" *ngIf="identityImageUrl">
+            <label class="section-label">Identity Verification Photo</label>
+            <div class="identity-box">
+              <img [src]="identityImageUrl" alt="Identity Photo" class="identity-image" />
             </div>
-            <input type="file" (change)="onFileSelected($event)" multiple hidden [disabled]="isFileInputDisabled"/>
-          </label>
+            <div class="actions">
+              <button type="button" class="button create" (click)="downloadIdentityImage()">Download Image</button>
+            </div>
+          </div>
         </div>
       </div>
     </form>
@@ -301,22 +344,35 @@
           </div>
         </div>   
         
-  
-        <div class="upload-section">
-          <label class="upload-label">
-            <div class="upload-box" [class.filled]="downloadedFiles.length">
-              <ng-container *ngIf="downloadedFiles.length; else noFile">
-                <div class="file-preview" *ngFor="let file of downloadedFiles">
-                  📄 {{ file.name }}
-                </div>
-              </ng-container>
-              <ng-template #noFile>
-                <img src="assets/icons/cloud-upload.svg" alt="Upload" />
-                <p style="line-height: 1.5rem;">Click Here to Upload Certification Files. Accepted file formats: PDF, DOC, or DOCX. (Maximum 10)</p>
-              </ng-template>
+
+        <div class="right-column">
+          <div class="upload-section">
+            <label class="upload-label">
+              <div class="upload-box" [class.filled]="downloadedFiles.length">
+                <ng-container *ngIf="downloadedFiles.length; else noFile">
+                  <div class="file-preview" *ngFor="let file of downloadedFiles">
+                    📄 {{ file.name }}
+                  </div>
+                </ng-container>
+                <ng-template #noFile>
+                  <img src="assets/icons/cloud-upload.svg" alt="Upload" />
+                  <p style="line-height: 1.5rem;">Click Here to Upload Certification Files. Accepted file formats: PDF, DOC, or DOCX. (Maximum 10)</p>
+                </ng-template>
+              </div>
+              <input type="file" (change)="onFileSelected($event)" multiple hidden [disabled]="isFileInputDisabled"/>
+            </label>
+          </div>
+
+          <!-- Identity Image Section - Add as a new card -->
+          <div class="identity-section" *ngIf="identityImageUrl">
+            <label class="section-label">Identity Verification Photo</label>
+            <div class="identity-box">
+              <img [src]="identityImageUrl" alt="Identity Photo" class="identity-image" />
             </div>
-            <input type="file" (change)="onFileSelected($event)" multiple hidden [disabled]="isFileInputDisabled"/>
-          </label>
+            <div class="actions">
+              <button type="button" class="button create" (click)="downloadIdentityImage()">Download Image</button>
+            </div>
+          </div>
         </div>
       </div>
     </form>
