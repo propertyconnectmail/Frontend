@@ -166,7 +166,7 @@ export class SettingComponent implements OnInit {
 
     
     isAdmin(): boolean {
-      return this.form.get('type')?.value === 'admin';
+      return this.form.get('type')?.value === 'system admin';
     }
 
   

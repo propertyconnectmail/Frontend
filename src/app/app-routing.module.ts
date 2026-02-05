@@ -18,27 +18,35 @@ import { SettingComponent } from './screens/setting/setting.component';
 import { loginGuard } from './_guards/login/login.guard';
 import { authGuard } from './_guards/auth/auth.guard';
 import { adminGuard } from './_guards/admin/admin.guard';
+import { businessAdminGuard } from './_guards/business-admin/business.admin.guard';
+import { operationsGuard } from './_guards/operations/operations.guard';
 import { RestrictedAccessComponent } from './components/restricted-access/restricted-access.component';
 
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent, canActivate: [loginGuard] },
   { path: 'dashboard', component: DashboardComponent, canActivate: [authGuard] },
+
   { path: 'professional', component: ProfessionalComponent, canActivate: [authGuard] },
   { path: 'professional/:mode', component: ProfessionalAddComponent, canActivate: [authGuard] },
   { path: 'professional/:mode/:id', component: ProfessionalAddComponent, canActivate: [authGuard] },
-  { path: 'client', component: ClientComponent, canActivate: [authGuard] },
-  { path: 'client/:mode', component: ClientCrudComponent, canActivate: [authGuard] },
-  { path: 'client/:mode/:id', component: ClientCrudComponent, canActivate: [authGuard] },
+
+  { path: 'client', component: ClientComponent, canActivate: [businessAdminGuard] },
+  { path: 'client/:mode', component: ClientCrudComponent, canActivate: [businessAdminGuard] },
+  { path: 'client/:mode/:id', component: ClientCrudComponent, canActivate: [businessAdminGuard] },
+
   { path: 'employee', component: EmployeeComponent, canActivate: [adminGuard] },
   { path: 'employee/:mode', component: EmployeeCrudComponent , canActivate: [adminGuard]},
   { path: 'employee/:mode/:id', component: EmployeeCrudComponent, canActivate: [adminGuard] },
-  { path: 'registry', component: RegistryComponent, canActivate: [authGuard] },
-  { path: 'registry/:mode', component: RegistryCrudComponent, canActivate: [authGuard] },
-  { path: 'registry/:mode/:id', component: RegistryCrudComponent, canActivate: [authGuard] },
-  { path: 'official', component: OfficialComponent, canActivate: [authGuard] },
-  { path: 'official/:mode', component: OfficialCrudComponent, canActivate: [authGuard] },
-  { path: 'official/:mode/:id', component: OfficialCrudComponent, canActivate: [authGuard] },
+
+  { path: 'registry', component: RegistryComponent, canActivate: [businessAdminGuard] },
+  { path: 'registry/:mode', component: RegistryCrudComponent, canActivate: [businessAdminGuard] },
+  { path: 'registry/:mode/:id', component: RegistryCrudComponent, canActivate: [businessAdminGuard] },
+
+  { path: 'official', component: OfficialComponent, canActivate: [businessAdminGuard] },
+  { path: 'official/:mode', component: OfficialCrudComponent, canActivate: [businessAdminGuard] },
+  { path: 'official/:mode/:id', component: OfficialCrudComponent, canActivate: [businessAdminGuard] },
+
   { path: 'log', component: LogsComponent, canActivate: [authGuard] },
   { path: 'payments', component: PaymentComponent, canActivate: [authGuard] },
   { path: 'settings', component: SettingComponent, canActivate: [authGuard] },

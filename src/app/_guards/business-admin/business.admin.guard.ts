@@ -1,7 +1,7 @@
 import { CanActivateFn, Router } from '@angular/router';
 import { inject } from '@angular/core';
 
-export const authGuard: CanActivateFn = (route, state) => {
+export const businessAdminGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
   const user = localStorage.getItem('user');
 
@@ -11,12 +11,12 @@ export const authGuard: CanActivateFn = (route, state) => {
   }
 
   const parsed = JSON.parse(user);
-  const allowedRoles = ['system admin', 'business admin', 'operations officer'];
+  const allowedRoles = ['system admin', 'business admin'];
 
   if (allowedRoles.includes(parsed.type)) {
     return true;
   }
 
-  router.navigate(['/login']);
+  router.navigate(['/restricted']);
   return false;
 };

@@ -29,7 +29,6 @@
                     <!-- Client Name with Avatar -->
                     <ng-container *ngSwitchCase="'clientName'">
                       <div class="user-cell">
-                        <img [src]="prof.clientUrl" [alt]="prof.clientName" class="user-avatar" />
                         <span>{{ prof.clientName }}</span>
                       </div>
                     </ng-container>
@@ -37,7 +36,6 @@
                     <!-- Professional Name with Avatar -->
                     <ng-container *ngSwitchCase="'professionalName'">
                       <div class="user-cell">
-                        <img [src]="prof.professionalUrl" [alt]="prof.professionalName" class="user-avatar" />
                         <span>{{ prof.professionalName }}</span>
                       </div>
                     </ng-container>

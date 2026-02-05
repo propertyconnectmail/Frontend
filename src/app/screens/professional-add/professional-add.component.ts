@@ -162,6 +162,7 @@ export class ProfessionalAddComponent implements OnInit {
       url: [''],
       status: [''], 
       certifications: [[]], 
+      identityImage: ['']
     });
 
     if(this.mode === 'add'){
@@ -193,6 +194,7 @@ export class ProfessionalAddComponent implements OnInit {
       url: professional.url,
       status: professional.status,
       certifications: professional.certifications || [],
+      identityImage: professional.identityImage || ''  
     });
 
     console.log(this.form.value)
@@ -382,6 +384,7 @@ export class ProfessionalAddComponent implements OnInit {
       this.isSubmitting = true;
       
       this.professionalService.updateProfessionalForm(professional).subscribe(async(res:any) => {
+        console.log(res)
         if(await res.message === 'success'){
           const now = new Date();
           const day = String(now.getDate()).padStart(2, '0');

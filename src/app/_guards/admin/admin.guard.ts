@@ -12,7 +12,7 @@ export const adminGuard: CanActivateFn = (route, state) => {
 
   const parsed = JSON.parse(user);
 
-  if (parsed.type === 'admin') {
+  if (parsed.type === 'system admin') {
     return true;
   }
 
