@@ -1,0 +1,354 @@
+<div class="detail-wrapper fade-in">
+  <div class="all-professionals-header">
+    <h2>Appointment Details</h2>
+  </div>
+
+  <div *ngIf="isLoading" class="shimmer-wrapper">
+    <div class="shimmer-card"></div>
+  </div>
+
+  <div *ngIf="!isLoading && appointment" class="detail-grid">
+    <!-- Left Column - Main Info -->
+    <div class="main-section">
+      <!-- Appointment Info Card -->
+      <div class="info-card">
+        <div class="card-header">
+          <h3>Appointment Information</h3>
+          <span class="status-badge" [ngClass]="appointment.appointmentStatus">
+            {{ getStatusLabel(appointment.appointmentStatus) }}
+          </span>
+        </div>
+        <div class="card-body">
+          <div class="info-row">
+            <span class="label">Appointment ID</span>
+            <span class="value">{{ appointment.appointmentId }}</span>
+          </div>
+          <div class="info-row">
+            <span class="label">Date</span>
+            <span class="value">{{ appointment.appointmentDate }}</span>
+          </div>
+          <div class="info-row">
+            <span class="label">Time</span>
+            <span class="value">{{ appointment.appointmentTime }}</span>
+          </div>
+          <div class="info-row">
+            <span class="label">Zoom Meeting</span>
+            <span class="value">
+              <a *ngIf="appointment.zoomJoinLink" [href]="appointment.zoomJoinLink" target="_blank" class="zoom-link">
+                Join Meeting
+              </a>
+              <span *ngIf="!appointment.zoomJoinLink" class="no-link">Not Available</span>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Client Info Card -->
+      <div class="info-card">
+        <div class="card-header">
+          <h3>Client Information</h3>
+          <span class="completion-badge" [ngClass]="{ 'completed': appointment.appointmentCompletedByClient }">
+            {{ appointment.appointmentCompletedByClient ? 'Completed' : 'Pending' }}
+          </span>
+        </div>
+        <div class="card-body">
+          <div class="user-profile">
+            <img [src]="appointment.clientUrl" alt="Client" class="user-avatar" />
+            <div class="user-details">
+              <h4>{{ appointment.clientName }}</h4>
+              <p>{{ appointment.clientEmail }}</p>
+            </div>
+          </div>
+          <div class="info-row" *ngIf="client">
+            <span class="label">Phone</span>
+            <span class="value">{{ client.phone }}</span>
+          </div>
+          <div class="info-row" *ngIf="client">
+            <span class="label">Address</span>
+            <span class="value">{{ client.address }}</span>
+          </div>
+
+          <!-- Client Feedback -->
+          <div class="feedback-section" *ngIf="appointment.clientFeedback?.submittedAt">
+            <h5>Client Feedback</h5>
+            <div class="feedback-badge" [ngClass]="{ 'satisfied': appointment.clientFeedback.satisfied, 'complaint': !appointment.clientFeedback.satisfied }">
+              {{ appointment.clientFeedback.satisfied ? 'Satisfied' : 'Filed Complaint' }}
+            </div>
+            <div *ngIf="!appointment.clientFeedback.satisfied" class="complaint-details">
+              <div class="info-row">
+                <span class="label">Type</span>
+                <span class="value">{{ getComplaintTypeLabel(appointment.clientFeedback.complaintType) }}</span>
+              </div>
+              <div class="info-row" *ngIf="appointment.clientFeedback.complaintMessage">
+                <span class="label">Message</span>
+                <span class="value message">{{ appointment.clientFeedback.complaintMessage }}</span>
+              </div>
+            </div>
+          </div>
+          <div class="no-feedback" *ngIf="!appointment.clientFeedback?.submittedAt">
+            <p>No feedback submitted yet</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Professional Info Card -->
+      <div class="info-card">
+        <div class="card-header">
+          <h3>Professional Information</h3>
+          <span class="completion-badge" [ngClass]="{ 'completed': appointment.appointmentCompletedByProfessional }">
+            {{ appointment.appointmentCompletedByProfessional ? 'Completed' : 'Pending' }}
+          </span>
+        </div>
+        <div class="card-body">
+          <div class="user-profile">
+            <img [src]="appointment.professionalUrl" alt="Professional" class="user-avatar" />
+            <div class="user-details">
+              <h4>{{ appointment.professionalName }}</h4>
+              <p>{{ appointment.professionalEmail }}</p>
+            </div>
+          </div>
+          <div class="info-row" *ngIf="professional">
+            <span class="label">Phone</span>
+            <span class="value">{{ professional.phone }}</span>
+          </div>
+          <div class="info-row" *ngIf="professional">
+            <span class="label">Type</span>
+            <span class="value">{{ professional.type | titlecase }}</span>
+          </div>
+          <div class="info-row" *ngIf="professional">
+            <span class="label">Consultation Fee</span>
+            <span class="value">LKR {{ professional.consultationFee }}</span>
+          </div>
+
+          <!-- Professional Feedback -->
+          <div class="feedback-section" *ngIf="appointment.professionalFeedback?.submittedAt">
+            <h5>Professional Feedback</h5>
+            <div class="feedback-badge" [ngClass]="{ 'satisfied': appointment.professionalFeedback.satisfied, 'complaint': !appointment.professionalFeedback.satisfied }">
+              {{ appointment.professionalFeedback.satisfied ? 'Satisfied' : 'Filed Complaint' }}
+            </div>
+            <div *ngIf="!appointment.professionalFeedback.satisfied" class="complaint-details">
+              <div class="info-row">
+                <span class="label">Type</span>
+                <span class="value">{{ getComplaintTypeLabel(appointment.professionalFeedback.complaintType) }}</span>
+              </div>
+              <div class="info-row" *ngIf="appointment.professionalFeedback.complaintMessage">
+                <span class="label">Message</span>
+                <span class="value message">{{ appointment.professionalFeedback.complaintMessage }}</span>
+              </div>
+            </div>
+          </div>
+          <div class="no-feedback" *ngIf="!appointment.professionalFeedback?.submittedAt">
+            <p>No feedback submitted yet</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column - Status & Actions -->
+    <div class="side-section">
+      <!-- Checklist Card -->
+      <div class="info-card checklist-card">
+        <div class="card-header">
+          <h3>Appointment Checklist</h3>
+        </div>
+        <div class="card-body">
+          <div class="checklist-item" [ngClass]="{ 'completed': appointment.chatInitiated }">
+            <div class="check-icon">
+              <svg *ngIf="appointment.chatInitiated" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <span *ngIf="!appointment.chatInitiated">1</span>
+            </div>
+            <span>Chat Initiated</span>
+          </div>
+          <div class="checklist-item" [ngClass]="{ 'completed': appointment.clientDocumentsUploaded }">
+            <div class="check-icon">
+              <svg *ngIf="appointment.clientDocumentsUploaded" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <span *ngIf="!appointment.clientDocumentsUploaded">2</span>
+            </div>
+            <span>Client Documents Uploaded</span>
+          </div>
+          <div class="checklist-item" [ngClass]="{ 'completed': appointment.zoomMeetingCompletedClient && appointment.zoomMeetingCompletedProfessional }">
+            <div class="check-icon">
+              <svg *ngIf="appointment.zoomMeetingCompletedClient && appointment.zoomMeetingCompletedProfessional" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <span *ngIf="!(appointment.zoomMeetingCompletedClient && appointment.zoomMeetingCompletedProfessional)">3</span>
+            </div>
+            <span>Meeting Attended</span>
+          </div>
+          <div class="checklist-item" [ngClass]="{ 'completed': appointment.professionalDocumentsUploaded }">
+            <div class="check-icon">
+              <svg *ngIf="appointment.professionalDocumentsUploaded" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <span *ngIf="!appointment.professionalDocumentsUploaded">4</span>
+            </div>
+            <span>Professional Documents Uploaded</span>
+          </div>
+          <div class="checklist-item" [ngClass]="{ 'completed': appointment.appointmentCompletedByClient && appointment.appointmentCompletedByProfessional }">
+            <div class="check-icon">
+              <svg *ngIf="appointment.appointmentCompletedByClient && appointment.appointmentCompletedByProfessional" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <span *ngIf="!(appointment.appointmentCompletedByClient && appointment.appointmentCompletedByProfessional)">5</span>
+            </div>
+            <span>Both Parties Confirmed</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Complaint Status Card (if has complaint) -->
+      <div class="info-card complaint-card" *ngIf="appointment.hasComplaint">
+        <div class="card-header">
+          <h3>Complaint Status</h3>
+          <span class="complaint-status-badge" [ngClass]="appointment.complaintStatus">
+            {{ appointment.complaintStatus | titlecase }}
+          </span>
+        </div>
+        <div class="card-body">
+          <p class="complaint-description">
+            <span *ngIf="appointment.complaintStatus === 'pending'">This complaint is awaiting review by the management team.</span>
+            <span *ngIf="appointment.complaintStatus === 'reviewing'">This complaint is currently being reviewed.</span>
+            <span *ngIf="appointment.complaintStatus === 'resolved'">This complaint has been resolved.</span>
+          </p>
+          <button 
+            *ngIf="appointment.complaintStatus !== 'resolved'" 
+            class="update-status-btn"
+            (click)="openComplaintModal()"
+          >
+            Update Complaint Status
+          </button>
+        </div>
+      </div>
+
+      <!-- Payment Card -->
+      <div class="info-card payment-card">
+        <div class="card-header">
+          <h3>Payment Summary</h3>
+        </div>
+        <div class="card-body">
+          <div class="payment-row">
+            <span class="label">Total Amount</span>
+            <span class="value highlight">LKR {{ appointment.totalPaymentAmount }}</span>
+          </div>
+          <div class="payment-row">
+            <span class="label">Professional Fee</span>
+            <span class="value">LKR {{ appointment.professionalPaymentAmount }}</span>
+          </div>
+          <div class="payment-row">
+            <span class="label">Platform Commission</span>
+            <span class="value">LKR {{ appointment.commission }}</span>
+          </div>
+          <div class="payment-row">
+            <span class="label">Transaction Fee</span>
+            <span class="value">LKR {{ appointment.transactionFee }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Documents Card -->
+      <div class="info-card documents-card">
+        <div class="card-header">
+          <h3>Documents</h3>
+        </div>
+        <div class="card-body">
+          <div class="document-section">
+            <h5>Client Documents</h5>
+            <div *ngIf="appointment.clientDocuments?.length > 0" class="document-list">
+              <div class="document-item" *ngFor="let doc of appointment.clientDocuments">
+                <span class="doc-icon">📄</span>
+                <span class="doc-name">{{ getFileName(doc) }}</span>
+              </div>
+              <button class="download-btn" (click)="downloadDocuments('client')">
+                Download All
+              </button>
+            </div>
+            <p *ngIf="!appointment.clientDocuments?.length" class="no-docs">No documents uploaded</p>
+          </div>
+
+          <div class="document-section">
+            <h5>Professional Documents</h5>
+            <div *ngIf="appointment.professionalDocuments?.length > 0" class="document-list">
+              <div class="document-item" *ngFor="let doc of appointment.professionalDocuments">
+                <span class="doc-icon">📄</span>
+                <span class="doc-name">{{ getFileName(doc) }}</span>
+              </div>
+              <button class="download-btn" (click)="downloadDocuments('professional')">
+                Download All
+              </button>
+            </div>
+            <p *ngIf="!appointment.professionalDocuments?.length" class="no-docs">No documents uploaded</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="actions">
+        <button class="button back-btn" (click)="goBack()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
+          Back to List
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Update Complaint Status Modal -->
+<div class="modal-overlay" *ngIf="showComplaintModal" (click)="closeComplaintModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>Update Complaint Status</h3>
+      <button class="close-btn" (click)="closeComplaintModal()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+    
+    <div class="modal-body">
+      <div class="status-update-section">
+        <label>Update Status To:</label>
+        <div class="status-options">
+          <button 
+            *ngFor="let status of availableStatuses" 
+            class="status-option-btn"
+            [class.selected]="newComplaintStatus === status.value"
+            [class.disabled]="!canTransitionTo(status.value)"
+            [disabled]="!canTransitionTo(status.value)"
+            (click)="selectNewStatus(status.value)"
+          >
+            <span class="status-dot" [ngClass]="status.value"></span>
+            {{ status.label }}
+          </button>
+        </div>
+      </div>
+
+      <div class="admin-notes-section">
+        <label>Admin Notes (Optional):</label>
+        <textarea 
+          [(ngModel)]="adminNotes" 
+          placeholder="Add any notes about this resolution..."
+          rows="3"
+        ></textarea>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-cancel" (click)="closeComplaintModal()">Cancel</button>
+      <button 
+        class="btn-update" 
+        [disabled]="!newComplaintStatus || isUpdating"
+        (click)="updateComplaintStatus()"
+      >
+        <span *ngIf="!isUpdating">Update Status</span>
+        <span *ngIf="isUpdating" class="spinner"></span>
+      </button>
+    </div>
+  </div>
+</div>

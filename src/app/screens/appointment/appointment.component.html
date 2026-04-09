@@ -1,0 +1,141 @@
+<div class="page-container">
+  <div class="all-professionals-header">
+    <h2>All Appointments</h2>
+  </div>
+
+  <div class="header-row">
+    <div class="search-container">
+      <svg viewBox="0 0 24 24" class="search-icon">
+        <path
+          d="M21 21l-4.35-4.35M10 18a8 8 0 100-16 8 8 0 000 16z"
+          stroke="currentColor"
+          stroke-width="2"
+          fill="none"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+      <input [formControl]="searchControl" placeholder="Search by client, professional, or appointment ID" />
+    </div>
+
+    <!-- Status Filter Tabs -->
+    <div class="filter-tabs">
+      <button 
+        *ngFor="let tab of statusTabs" 
+        class="filter-tab"
+        [class.active]="selectedStatus === tab.value"
+        (click)="selectStatus(tab.value)"
+      >
+        {{ tab.label }}
+        <span class="tab-count" *ngIf="getStatusCount(tab.value) > 0">{{ getStatusCount(tab.value) }}</span>
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="isLoading" class="shimmer-wrapper">
+    <div class="shimmer-card" *ngFor="let n of [].constructor(1)"></div>
+  </div>
+
+  <div class="table-container" *ngIf="!isLoading" [@fadeInOut]>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Appointment ID</th>
+            <th>Client</th>
+            <th>Professional</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Status</th>
+            <th>Complaint</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let appointment of paginatedData; let i = index" [class.even]="i % 2 === 0">
+            <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+            <td>{{ appointment.appointmentId }}</td>
+            <td>
+              <div class="user-cell">
+                <img [src]="appointment.clientUrl" alt="Client" class="user-avatar" />
+                <span>{{ appointment.clientName }}</span>
+              </div>
+            </td>
+            <td>
+              <div class="user-cell">
+                <img [src]="appointment.professionalUrl" alt="Professional" class="user-avatar" />
+                <span>{{ appointment.professionalName }}</span>
+              </div>
+            </td>
+            <td>{{ appointment.appointmentDate }}</td>
+            <td>{{ appointment.appointmentTime }}</td>
+            <td>
+                <span class="status" [ngClass]="appointment.appointmentStatus"></span>
+                {{ getStatusLabel(appointment.appointmentStatus) }}
+            </td>
+            <td>
+              <span class="complaint-badge" [ngClass]="{ 'has-complaint': appointment.hasComplaint, 'no-complaint': !appointment.hasComplaint }">
+                {{ appointment.hasComplaint ? 'Yes' : 'No' }}
+              </span>
+            </td>
+            <td class="action-buttons">
+              <button (click)="view(appointment.appointmentId)" title="View">
+                <img src="assets/icons/view.svg" alt="View" />
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="paginatedData.length === 0" class="empty-state">
+      <p>No appointments found</p>
+    </div>
+
+    <div class="table-footer" style="display: flex; justify-content: flex-end;">
+      <div class="pagination-controls">
+        <button (click)="prevPage()" [disabled]="currentPage === 1" aria-label="Previous Page">
+          <svg viewBox="0 0 24 24" class="chevron chevron-left">
+            <path d="M15 6l-6 6 6 6" />
+          </svg>
+        </button>
+
+        <button
+          *ngIf="totalPages > 1"
+          [class.active]="currentPage === 1"
+          (click)="goToPage(1)"
+        >
+          1
+        </button>
+
+        <span *ngIf="currentPage > 4">...</span>
+
+        <button
+          *ngFor="let page of visiblePages"
+          [class.active]="currentPage === page"
+          (click)="goToPage(page)"
+        >
+          {{ page }}
+        </button>
+
+        <span *ngIf="currentPage < totalPages - 3">...</span>
+
+        <button
+          *ngIf="totalPages > 1"
+          [class.active]="currentPage === totalPages"
+          (click)="goToPage(totalPages)"
+        >
+          {{ totalPages }}
+        </button>
+
+        <button (click)="nextPage()" [disabled]="currentPage === totalPages" aria-label="Next Page">
+          <svg viewBox="0 0 24 24" class="chevron chevron-right">
+            <path d="M9 6l6 6-6 6" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

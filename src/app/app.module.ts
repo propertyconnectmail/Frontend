@@ -28,6 +28,8 @@ import { LogsComponent } from './screens/logs/logs.component';
 import { SettingComponent } from './screens/setting/setting.component';
 import { PaymentComponent } from './screens/payment/payment.component';
 import { RestrictedAccessComponent } from './components/restricted-access/restricted-access.component';
+import { AppointmentComponent } from './screens/appointment/appointment.component';
+import { AppointmentDetailComponent } from './screens/appointment-detail/appointment-detail.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +52,9 @@ import { RestrictedAccessComponent } from './components/restricted-access/restri
     LogsComponent,
     SettingComponent,
     PaymentComponent,
-    RestrictedAccessComponent
+    RestrictedAccessComponent,
+    AppointmentComponent,
+    AppointmentDetailComponent
   ],
   imports: [
     BrowserModule,

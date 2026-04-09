@@ -1,9 +1,7 @@
 <div class="add-professional-wrapper fade-in" *ngIf="this.mode === 'add'">
-
     <div class="all-professionals-header">
         <h2>Add Professional</h2>
     </div>
-
     <form [formGroup]="form" novalidate>
       <div class="form-grid">
         <div class="form-section">  
@@ -24,12 +22,11 @@
               <input formControlName="dobYear" class="dob-select" type="number" placeholder="Year" min="1950" max="2025" />
             </div>
           </div>
-
           <div class="form-group" style="margin-top: 1.2rem;">
             <div class="dob-group">
               <div class="dropdown-wrapper">
                 <label for="status">Status <span>*</span></label>
-                <select formControlName="status" class="dob-select" formControlName="status">
+                <select formControlName="status" class="dob-select">
                   <option value="" disabled>Select Status</option>
                   <option *ngFor="let status of statuses" [value]="status">{{ status.charAt(0).toUpperCase() + status.slice(1) }}</option>
                 </select>
@@ -37,12 +34,44 @@
           
               <div class="dropdown-wrapper">
                 <label>Professional Type <span>*</span></label>
-                <select formControlName="type" class="dob-select" formControlName="type">
+                <select formControlName="type" class="dob-select">
                   <option value="" disabled>Select Type</option>
                   <option *ngFor="let type of professionalTypes" [value]="type">{{ type.charAt(0).toUpperCase() + type.slice(1) }}</option>
                 </select>
               </div>
             </div>
+          </div>
+
+          <!-- Add this after the status/type dropdown section -->
+          <div class="form-group" style="margin-top: 1.2rem;">
+            <div class="dob-group">
+              <div class="dropdown-wrapper">
+                <label for="province">Province <span>*</span></label>
+                <select formControlName="province" class="dob-select">
+                  <option value="" disabled>Select Province</option>
+                  <option *ngFor="let province of provinces" [value]="province">{{ province }}</option>
+                </select>
+              </div>
+
+              <div class="dropdown-wrapper">
+                <label for="district">District</label>
+                <input formControlName="district" class="dob-select" type="text" placeholder="Enter district (optional)" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Rejection Reason - Only shows when status is 'rejected' -->
+          <div class="form-group rejection-reason-group" *ngIf="form.get('status')?.value === 'rejected'">
+            <label for="rejectionReason">Rejection Reason <span>*</span></label>
+            <textarea 
+              formControlName="rejectionReason" 
+              id="rejectionReason" 
+              rows="4" 
+              placeholder="Enter the reason for rejecting this professional..."
+            ></textarea>
+            <small class="form-error" [class.visible]="form.get('rejectionReason')?.touched && (!form.get('rejectionReason')?.value || form.get('rejectionReason')?.value.length < 10)">
+              Please provide a rejection reason (minimum 10 characters)
+            </small>
           </div>
           
           <div class="actions">
@@ -56,7 +85,6 @@
             <button type="button" class="button cancel" (click)="cancel()">Cancel</button>
           </div>          
         </div>
-
         <div class="right-column">
           <div class="upload-section">
             <label class="upload-label">
@@ -74,8 +102,7 @@
               <input type="file" (change)="onFileSelected($event)" multiple hidden accept=".pdf, .doc, .docx, application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document"/>
             </label>
           </div>
-
-          <!-- Identity Image Section - Add as a new card -->
+          <!-- Identity Image Section -->
           <div class="identity-section" *ngIf="identityImageUrl">
             <label class="section-label">Identity Verification Photo</label>
             <div class="identity-box">
@@ -88,16 +115,12 @@
         </div>
       </div>
     </form>
-  </div>
+</div>
   
-
-  <div class="add-professional-wrapper fade-in" *ngIf="this.mode === 'view'">
-
+<div class="add-professional-wrapper fade-in" *ngIf="this.mode === 'view'">
     <div class="all-professionals-header">
         <h2>View Professional</h2>
     </div>
-
-
     <form [formGroup]="form" novalidate>
       <div class="form-grid">
         <div class="form-section">  
@@ -110,7 +133,7 @@
           <div class="form-group">
             <label>Date of Birth <span> *</span></label>
             <div class="dob-group">
-              <select formControlName="dobMonth" class="dob-select" >
+              <select formControlName="dobMonth" class="dob-select">
                 <option value="" disabled selected>Select Month</option>
                 <option *ngFor="let month of months">{{ month }}</option>
               </select>
@@ -118,12 +141,11 @@
               <input formControlName="dobYear" class="dob-select" type="number" placeholder="Year" min="1950" max="2025" />
             </div>
           </div>
-
           <div class="form-group" style="margin-top: 1.2rem;">
             <div class="dob-group">
               <div class="dropdown-wrapper">
                 <label for="status">Status <span>*</span></label>
-                <select formControlName="status" class="dob-select" formControlName="status">
+                <select formControlName="status" class="dob-select">
                   <option value="" disabled>Select Status</option>
                   <option *ngFor="let status of statuses" [value]="status">{{ status.charAt(0).toUpperCase() + status.slice(1) }}</option>
                 </select>
@@ -131,24 +153,52 @@
           
               <div class="dropdown-wrapper">
                 <label>Professional Type <span>*</span></label>
-                <select formControlName="type" class="dob-select" formControlName="type">
+                <select formControlName="type" class="dob-select">
                   <option value="" disabled>Select Type</option>
                   <option *ngFor="let type of professionalTypes" [value]="type">{{ type.charAt(0).toUpperCase() + type.slice(1) }}</option>
                 </select>
               </div>
             </div>
-          </div>  
+          </div>
+
+          <!-- Add this after the status/type dropdown section -->
+          <div class="form-group" style="margin-top: 1.2rem;">
+            <div class="dob-group">
+              <div class="dropdown-wrapper">
+                <label for="province">Province <span>*</span></label>
+                <select formControlName="province" class="dob-select">
+                  <option value="" disabled>Select Province</option>
+                  <option *ngFor="let province of provinces" [value]="province">{{ province }}</option>
+                </select>
+              </div>
+
+              <div class="dropdown-wrapper">
+                <label for="district">District</label>
+                <input formControlName="district" class="dob-select" type="text" placeholder="Enter district (optional)" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Rejection Reason Banner - Read-only display for rejected professionals -->
+          <div class="rejection-banner" *ngIf="form.get('status')?.value === 'rejected' && form.get('rejectionReason')?.value">
+            <div class="rejection-header">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+              </svg>
+              <span>Rejection Reason</span>
+            </div>
+            <p class="rejection-text">{{ form.get('rejectionReason')?.value }}</p>
+            <p class="rejection-date" *ngIf="rejectedAt">Rejected on: {{ rejectedAt | date:'medium' }}</p>
+          </div>
           
           <div class="actions">
             <button type="button" class="button create" (click)="cancel()">Go Back</button>
           </div>
         </div>   
         
-  
-        <div class="upload-section">
-          
-        </div>
-
+        <div class="upload-section"></div>
         <div class="right-column">
           <div class="upload-section">
             <label class="upload-label">
@@ -165,13 +215,11 @@
               </div>
               <input type="file" (change)="onFileSelected($event)" multiple hidden [disabled]="isFileInputDisabled"/>
             </label>
-
             <div class="actions" style="display: flex; justify-content: flex-end; margin-top: 3rem;">
               <button type="button" class="button create" (click)="downloadFilesAsZip()">Download Files</button>
             </div>
           </div>
-
-          <!-- Identity Image Section - Add as a new card -->
+          <!-- Identity Image Section -->
           <div class="identity-section" *ngIf="identityImageUrl">
             <label class="section-label">Identity Verification Photo</label>
             <div class="identity-box">
@@ -184,18 +232,12 @@
         </div>
       </div>
     </form>
-  </div>
+</div>
 
-
-
-
-  <div class="add-professional-wrapper fade-in" *ngIf="this.mode === 'edit'">
-
+<div class="add-professional-wrapper fade-in" *ngIf="this.mode === 'edit'">
     <div class="all-professionals-header">
         <h2>Update Professional</h2>
     </div>
-
-
     <form [formGroup]="form" novalidate>
       <div class="form-grid">
         <div class="form-section">  
@@ -208,7 +250,7 @@
           <div class="form-group">
             <label>Date of Birth <span> *</span></label>
             <div class="dob-group">
-              <select formControlName="dobMonth" class="dob-select" >
+              <select formControlName="dobMonth" class="dob-select">
                 <option value="" disabled selected>Select Month</option>
                 <option *ngFor="let month of months">{{ month }}</option>
               </select>
@@ -216,12 +258,11 @@
               <input formControlName="dobYear" class="dob-select" type="number" placeholder="Year" min="1950" max="2025" />
             </div>
           </div>
-
           <div class="form-group" style="margin-top: 1.2rem;">
             <div class="dob-group">
               <div class="dropdown-wrapper">
                 <label for="status">Status <span>*</span></label>
-                <select formControlName="status" class="dob-select" formControlName="status">
+                <select formControlName="status" class="dob-select">
                   <option value="" disabled>Select Status</option>
                   <option *ngFor="let status of statuses" [value]="status">{{ status.charAt(0).toUpperCase() + status.slice(1) }}</option>
                 </select>
@@ -229,13 +270,45 @@
           
               <div class="dropdown-wrapper">
                 <label>Professional Type <span>*</span></label>
-                <select formControlName="type" class="dob-select" formControlName="type">
+                <select formControlName="type" class="dob-select">
                   <option value="" disabled>Select Type</option>
                   <option *ngFor="let type of professionalTypes" [value]="type">{{ type.charAt(0).toUpperCase() + type.slice(1) }}</option>
                 </select>
               </div>
             </div>
-          </div>  
+          </div>
+
+          <!-- Add this after the status/type dropdown section -->
+          <div class="form-group" style="margin-top: 1.2rem;">
+            <div class="dob-group">
+              <div class="dropdown-wrapper">
+                <label for="province">Province <span>*</span></label>
+                <select formControlName="province" class="dob-select">
+                  <option value="" disabled>Select Province</option>
+                  <option *ngFor="let province of provinces" [value]="province">{{ province }}</option>
+                </select>
+              </div>
+
+              <div class="dropdown-wrapper">
+                <label for="district">District</label>
+                <input formControlName="district" class="dob-select" type="text" placeholder="Enter district (optional)" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Rejection Reason - Editable textarea when status is 'rejected' -->
+          <div class="form-group rejection-reason-group" *ngIf="form.get('status')?.value === 'rejected'">
+            <label for="rejectionReason">Rejection Reason <span>*</span></label>
+            <textarea 
+              formControlName="rejectionReason" 
+              id="rejectionReason" 
+              rows="4" 
+              placeholder="Enter the reason for rejecting this professional..."
+            ></textarea>
+            <small class="form-error" [class.visible]="form.get('rejectionReason')?.touched && (!form.get('rejectionReason')?.value || form.get('rejectionReason')?.value.length < 10)">
+              Please provide a rejection reason (minimum 10 characters)
+            </small>
+          </div>
           
           <div class="actions">
             <button class="button create" (click)="update()">
@@ -243,12 +316,10 @@
                   <span *ngIf="!isSubmitting">Update</span>
                   <span *ngIf="isSubmitting" class="spinner spinner-primary spinner-md"></span>
               </div>
-          </button>
-          <button type="button" class="button cancel" (click)="cancel()">Cancel</button>
+            </button>
+            <button type="button" class="button cancel" (click)="cancel()">Cancel</button>
           </div>
         </div>   
-
-
         <div class="right-column">
           <div class="upload-section">
             <label class="upload-label">
@@ -266,8 +337,7 @@
               <input type="file" (change)="onFileSelected($event)" multiple hidden [disabled]="isFileInputDisabled"/>
             </label>
           </div>
-
-          <!-- Identity Image Section - Add as a new card -->
+          <!-- Identity Image Section -->
           <div class="identity-section" *ngIf="identityImageUrl">
             <label class="section-label">Identity Verification Photo</label>
             <div class="identity-box">
@@ -280,18 +350,12 @@
         </div>
       </div>
     </form>
-
-  </div>
+</div>
   
-
-
-  <div class="add-professional-wrapper fade-in" *ngIf="this.mode === 'delete'">
-
+<div class="add-professional-wrapper fade-in" *ngIf="this.mode === 'delete'">
     <div class="all-professionals-header">
         <h2>Delete Professional</h2>
     </div>
-
-
     <form [formGroup]="form" novalidate>
       <div class="form-grid">
         <div class="form-section">  
@@ -304,7 +368,7 @@
           <div class="form-group">
             <label>Date of Birth <span> *</span></label>
             <div class="dob-group">
-              <select formControlName="dobMonth" class="dob-select" >
+              <select formControlName="dobMonth" class="dob-select">
                 <option value="" disabled selected>Select Month</option>
                 <option *ngFor="let month of months">{{ month }}</option>
               </select>
@@ -312,12 +376,11 @@
               <input formControlName="dobYear" class="dob-select" type="number" placeholder="Year" min="1950" max="2025" />
             </div>
           </div>
-
           <div class="form-group" style="margin-top: 1.2rem;">
             <div class="dob-group">
               <div class="dropdown-wrapper">
                 <label for="status">Status <span>*</span></label>
-                <select formControlName="status" class="dob-select" formControlName="status">
+                <select formControlName="status" class="dob-select">
                   <option value="" disabled>Select Status</option>
                   <option *ngFor="let status of statuses" [value]="status">{{ status.charAt(0).toUpperCase() + status.slice(1) }}</option>
                 </select>
@@ -325,13 +388,45 @@
           
               <div class="dropdown-wrapper">
                 <label>Professional Type <span>*</span></label>
-                <select formControlName="type" class="dob-select" formControlName="type">
+                <select formControlName="type" class="dob-select">
                   <option value="" disabled>Select Type</option>
                   <option *ngFor="let type of professionalTypes" [value]="type">{{ type.charAt(0).toUpperCase() + type.slice(1) }}</option>
                 </select>
               </div>
             </div>
-          </div>  
+          </div>
+
+          <!-- Add this after the status/type dropdown section -->
+          <div class="form-group" style="margin-top: 1.2rem;">
+            <div class="dob-group">
+              <div class="dropdown-wrapper">
+                <label for="province">Province <span>*</span></label>
+                <select formControlName="province" class="dob-select">
+                  <option value="" disabled>Select Province</option>
+                  <option *ngFor="let province of provinces" [value]="province">{{ province }}</option>
+                </select>
+              </div>
+
+              <div class="dropdown-wrapper">
+                <label for="district">District</label>
+                <input formControlName="district" class="dob-select" type="text" placeholder="Enter district (optional)" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Rejection Reason Banner - Read-only display for rejected professionals -->
+          <div class="rejection-banner" *ngIf="form.get('status')?.value === 'rejected' && form.get('rejectionReason')?.value">
+            <div class="rejection-header">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+              </svg>
+              <span>Rejection Reason</span>
+            </div>
+            <p class="rejection-text">{{ form.get('rejectionReason')?.value }}</p>
+            <p class="rejection-date" *ngIf="rejectedAt">Rejected on: {{ rejectedAt | date:'medium' }}</p>
+          </div>
           
           <div class="actions">
             <button class="button cancel" (click)="delete()">
@@ -339,12 +434,11 @@
                   <span *ngIf="!isSubmitting">Delete</span>
                   <span *ngIf="isSubmitting" class="spinner spinner-primary spinner-md"></span>
               </div>
-          </button>
-          <button type="button" class="button cancel" (click)="cancel()">Cancel</button>
+            </button>
+            <button type="button" class="button cancel" (click)="cancel()">Cancel</button>
           </div>
         </div>   
         
-
         <div class="right-column">
           <div class="upload-section">
             <label class="upload-label">
@@ -362,8 +456,7 @@
               <input type="file" (change)="onFileSelected($event)" multiple hidden [disabled]="isFileInputDisabled"/>
             </label>
           </div>
-
-          <!-- Identity Image Section - Add as a new card -->
+          <!-- Identity Image Section -->
           <div class="identity-section" *ngIf="identityImageUrl">
             <label class="section-label">Identity Verification Photo</label>
             <div class="identity-box">
@@ -376,6 +469,4 @@
         </div>
       </div>
     </form>
-
-  </div>
-  
+</div>

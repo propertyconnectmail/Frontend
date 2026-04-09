@@ -21,6 +21,8 @@ import { adminGuard } from './_guards/admin/admin.guard';
 import { businessAdminGuard } from './_guards/business-admin/business.admin.guard';
 import { operationsGuard } from './_guards/operations/operations.guard';
 import { RestrictedAccessComponent } from './components/restricted-access/restricted-access.component';
+import { AppointmentComponent } from './screens/appointment/appointment.component';
+import { AppointmentDetailComponent } from './screens/appointment-detail/appointment-detail.component';
 
 
 const routes: Routes = [
@@ -50,6 +52,10 @@ const routes: Routes = [
   { path: 'log', component: LogsComponent, canActivate: [authGuard] },
   { path: 'payments', component: PaymentComponent, canActivate: [authGuard] },
   { path: 'settings', component: SettingComponent, canActivate: [authGuard] },
+
+  { path: 'appointment', component: AppointmentComponent },
+  { path: 'appointment/:mode/:id', component: AppointmentDetailComponent },
+  
   { path: 'restricted', component: RestrictedAccessComponent },
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
   { path: '**', redirectTo: '/dashboard' }
