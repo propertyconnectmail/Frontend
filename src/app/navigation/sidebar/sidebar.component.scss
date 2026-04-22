@@ -94,6 +94,7 @@
         width: clamp(16px, 1.5vw, 20px);
         height: clamp(16px, 1.5vw, 20px);
         flex-shrink: 0;
+        filter: brightness(0) invert(1);
       }
 
       .nav-label {
